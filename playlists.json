@@ -1,0 +1,816 @@
+{
+  "nature": {
+    "name": "自然音",
+    "tracks": [
+      {
+        "id": "nature-01",
+        "src": "bgm/nature-01.mp3",
+        "title": "静かな雨 ①",
+        "artist": "joedeshon",
+        "duration": 600.0,
+        "sha256": "a85e4587133db5cb77ba0a90f1d0ebfdc11c5e766999cc535672fd07d7289643",
+        "bytes": 12001219,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://freesound.org/people/joedeshon/sounds/430765/",
+        "attribution_required": false,
+        "selection_basis": "Continuous front-porch field recording. Distant thunder at about 16:20 and small ambient splashes/traffic noted by author. Prefer excluding 15:50-17:00; subjective listening pending.",
+        "original_title": "long_easy_rain_08.wav",
+        "original_id": "nature-rain-24",
+        "source_interval_seconds": {
+          "start": 0,
+          "end": 600
+        },
+        "input_sha256": "837f9a1dfa4573d04c1b008e3f474c2415cbfcfc541b9f358c38edae099c2051",
+        "acquisition_kind": "Official full-length HQ MP3 preview of the author-uploaded CC0 WAV recording",
+        "processing_note": "Lossless FLAC excerpt of HQ MP3 preview. No pitch/time change, no synthesis, no repetition. Contiguous source boundaries overlap by 4 seconds for playlist crossfade. Field recording 15:50–17:00 omitted around author-reported distant thunder at 16:20. No other loudness or EQ changes at this stage.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "nature-02",
+        "src": "bgm/nature-02.mp3",
+        "title": "静かな雨 ②",
+        "artist": "joedeshon",
+        "duration": 354.0,
+        "sha256": "98da99f8f1dd3d29c9f8ba3cae6f538dfb280d65a87d1b39de507f8dda04814a",
+        "bytes": 7081317,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://freesound.org/people/joedeshon/sounds/430765/",
+        "attribution_required": false,
+        "selection_basis": "Continuous front-porch field recording. Distant thunder at about 16:20 and small ambient splashes/traffic noted by author. Prefer excluding 15:50-17:00; subjective listening pending.",
+        "original_title": "long_easy_rain_08.wav",
+        "original_id": "nature-rain-24",
+        "source_interval_seconds": {
+          "start": 596,
+          "end": 950
+        },
+        "input_sha256": "837f9a1dfa4573d04c1b008e3f474c2415cbfcfc541b9f358c38edae099c2051",
+        "acquisition_kind": "Official full-length HQ MP3 preview of the author-uploaded CC0 WAV recording",
+        "processing_note": "Lossless FLAC excerpt of HQ MP3 preview. No pitch/time change, no synthesis, no repetition. Contiguous source boundaries overlap by 4 seconds for playlist crossfade. Field recording 15:50–17:00 omitted around author-reported distant thunder at 16:20. No other loudness or EQ changes at this stage.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "nature-03",
+        "src": "bgm/nature-03.mp3",
+        "title": "静かな雨 ③",
+        "artist": "joedeshon",
+        "duration": 435.598375,
+        "sha256": "3745fc82006ddfab1ffa21a5ff6f7b4d46871fe67512a6b2971ef856f5f62b9e",
+        "bytes": 8713448,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://freesound.org/people/joedeshon/sounds/430765/",
+        "attribution_required": false,
+        "selection_basis": "Continuous front-porch field recording. Distant thunder at about 16:20 and small ambient splashes/traffic noted by author. Prefer excluding 15:50-17:00; subjective listening pending.",
+        "original_title": "long_easy_rain_08.wav",
+        "original_id": "nature-rain-24",
+        "source_interval_seconds": {
+          "start": 1020,
+          "end": 1455.599
+        },
+        "input_sha256": "837f9a1dfa4573d04c1b008e3f474c2415cbfcfc541b9f358c38edae099c2051",
+        "acquisition_kind": "Official full-length HQ MP3 preview of the author-uploaded CC0 WAV recording",
+        "processing_note": "Lossless FLAC excerpt of HQ MP3 preview. No pitch/time change, no synthesis, no repetition. Contiguous source boundaries overlap by 4 seconds for playlist crossfade. Field recording 15:50–17:00 omitted around author-reported distant thunder at 16:20. No other loudness or EQ changes at this stage.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "nature-04",
+        "src": "bgm/nature-04.mp3",
+        "title": "天窓に降る雨 ①",
+        "artist": "pulswelle",
+        "duration": 310.0,
+        "sha256": "76ec366ccc8a37504819fbb303698f5a99a5cb7c0e635be0754228b905bcc1e9",
+        "bytes": 6201513,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://freesound.org/people/pulswelle/sounds/680513/",
+        "attribution_required": false,
+        "selection_basis": "Author describes rain on a skylight, dynamic, gradually stops at end. Original stereo 48kHz/24bit; decoded HQ MP3 preview used.",
+        "original_title": "Rain falling on a skylight",
+        "original_id": "nature-rain-skylight",
+        "source_interval_seconds": {
+          "start": 0,
+          "end": 310
+        },
+        "input_sha256": "a82e9e611ed35d47688d0bb41dee47a57d64b9269e5376fe310d9aa056e81085",
+        "acquisition_kind": "Official full-length HQ MP3 preview of the author-uploaded CC0 WAV recording",
+        "processing_note": "Lossless FLAC excerpt of HQ MP3 preview. No pitch/time change, no synthesis, no repetition. Contiguous source boundaries overlap by 4 seconds for playlist crossfade. Field recording 15:50–17:00 omitted around author-reported distant thunder at 16:20. No other loudness or EQ changes at this stage.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "nature-05",
+        "src": "bgm/nature-05.mp3",
+        "title": "天窓に降る雨 ②",
+        "artist": "pulswelle",
+        "duration": 310.748,
+        "sha256": "e1caaafa46695fb24c6b3d44ecc32e9561f5be5281cf005a650bab333f8e9d96",
+        "bytes": 6216142,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://freesound.org/people/pulswelle/sounds/680513/",
+        "attribution_required": false,
+        "selection_basis": "Author describes rain on a skylight, dynamic, gradually stops at end. Original stereo 48kHz/24bit; decoded HQ MP3 preview used.",
+        "original_title": "Rain falling on a skylight",
+        "original_id": "nature-rain-skylight",
+        "source_interval_seconds": {
+          "start": 306,
+          "end": 616.748
+        },
+        "input_sha256": "a82e9e611ed35d47688d0bb41dee47a57d64b9269e5376fe310d9aa056e81085",
+        "acquisition_kind": "Official full-length HQ MP3 preview of the author-uploaded CC0 WAV recording",
+        "processing_note": "Lossless FLAC excerpt of HQ MP3 preview. No pitch/time change, no synthesis, no repetition. Contiguous source boundaries overlap by 4 seconds for playlist crossfade. Field recording 15:50–17:00 omitted around author-reported distant thunder at 16:20. No other loudness or EQ changes at this stage.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      }
+    ],
+    "duration": 1994.346375
+  },
+  "piano": {
+    "name": "ピアノクラシック",
+    "tracks": [
+      {
+        "id": "piano-goldberg-01",
+        "src": "bgm/piano-goldberg-01.mp3",
+        "title": "Aria",
+        "artist": "Kimiko Ishizaka",
+        "duration": 299.52,
+        "sha256": "e1c13da18290c30ccf39bd1cd8bda6a7bde5321ba54ccd30be69dc17a20b38a7",
+        "bytes": 5991488,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://archive.org/details/The_Open_Goldberg_Variations-11823",
+        "composer": "Johann Sebastian Bach",
+        "rights_source_page": "https://opengoldbergvariations.org/",
+        "selection_basis": "Aria and selected lyrical/canonic variations; excludes brisk virtuoso variations. Subjective suitability remains unlistened.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "piano-goldberg-10",
+        "src": "bgm/piano-goldberg-10.mp3",
+        "title": "Variatio 9 a 1 Clav. Canone alla Terza",
+        "artist": "Kimiko Ishizaka",
+        "duration": 126.24,
+        "sha256": "7885f6872681215193f9dbbf359ab32da17c8c661a9f9876bf27ff9d4777d145",
+        "bytes": 2526084,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://archive.org/details/The_Open_Goldberg_Variations-11823",
+        "composer": "Johann Sebastian Bach",
+        "rights_source_page": "https://opengoldbergvariations.org/",
+        "selection_basis": "Aria and selected lyrical/canonic variations; excludes brisk virtuoso variations. Subjective suitability remains unlistened.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "piano-goldberg-14",
+        "src": "bgm/piano-goldberg-14.mp3",
+        "title": "Variatio 13 a 2 Clav.",
+        "artist": "Kimiko Ishizaka",
+        "duration": 254.453375,
+        "sha256": "bbe3996aacbbb1d4807c8983c75393fbd9817b7434ddcf5ff2036b0a96604c55",
+        "bytes": 5090264,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://archive.org/details/The_Open_Goldberg_Variations-11823",
+        "composer": "Johann Sebastian Bach",
+        "rights_source_page": "https://opengoldbergvariations.org/",
+        "selection_basis": "Aria and selected lyrical/canonic variations; excludes brisk virtuoso variations. Subjective suitability remains unlistened.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "piano-goldberg-16",
+        "src": "bgm/piano-goldberg-16.mp3",
+        "title": "Variatio 15 a 1 Clav. Canone alla Quinta",
+        "artist": "Kimiko Ishizaka",
+        "duration": 272.50675,
+        "sha256": "b1743f46e4d97c0df7b46b8f216503e619450030476f413f38b91fbbd07533c0",
+        "bytes": 5451276,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://archive.org/details/The_Open_Goldberg_Variations-11823",
+        "composer": "Johann Sebastian Bach",
+        "rights_source_page": "https://opengoldbergvariations.org/",
+        "selection_basis": "Aria and selected lyrical/canonic variations; excludes brisk virtuoso variations. Subjective suitability remains unlistened.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "piano-goldberg-22",
+        "src": "bgm/piano-goldberg-22.mp3",
+        "title": "Variatio 21 Canone alla Settima",
+        "artist": "Kimiko Ishizaka",
+        "duration": 234.52,
+        "sha256": "053738c32cd8b89f9156dcde306a12f7b54b04a40c51e263d7d92e7c10c26462",
+        "bytes": 4691635,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://archive.org/details/The_Open_Goldberg_Variations-11823",
+        "composer": "Johann Sebastian Bach",
+        "rights_source_page": "https://opengoldbergvariations.org/",
+        "selection_basis": "Aria and selected lyrical/canonic variations; excludes brisk virtuoso variations. Subjective suitability remains unlistened.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "piano-goldberg-25",
+        "src": "bgm/piano-goldberg-25.mp3",
+        "title": "Variatio 24 a 1 Clav. Canone all'Ottava",
+        "artist": "Kimiko Ishizaka",
+        "duration": 165.46675,
+        "sha256": "611c8f4d3a275aa1ae750c978915c6eb5e2050cfafd469eaa7e11e7d60623ca9",
+        "bytes": 3310803,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://archive.org/details/The_Open_Goldberg_Variations-11823",
+        "composer": "Johann Sebastian Bach",
+        "rights_source_page": "https://opengoldbergvariations.org/",
+        "selection_basis": "Aria and selected lyrical/canonic variations; excludes brisk virtuoso variations. Subjective suitability remains unlistened.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "piano-goldberg-26",
+        "src": "bgm/piano-goldberg-26.mp3",
+        "title": "Variatio 25 a 2 Clav.",
+        "artist": "Kimiko Ishizaka",
+        "duration": 558.30675,
+        "sha256": "c7ab2723dbb1413876dc8939115b94191fc0e83d207896e09cdd32d18fcba177",
+        "bytes": 11167391,
+        "license": "CC0 1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "source_page": "https://archive.org/details/The_Open_Goldberg_Variations-11823",
+        "composer": "Johann Sebastian Bach",
+        "rights_source_page": "https://opengoldbergvariations.org/",
+        "selection_basis": "Aria and selected lyrical/canonic variations; excludes brisk virtuoso variations. Subjective suitability remains unlistened.",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      }
+    ],
+    "duration": 1887.013625
+  },
+  "jazz": {
+    "name": "カフェジャズ",
+    "tracks": [
+      {
+        "id": "usuan1700074",
+        "src": "bgm/usuan1700074.mp3",
+        "title": "Jazz Brunch",
+        "artist": "Kevin MacLeod",
+        "duration": 323.108625,
+        "sha256": "ed1796c1f946b331fe5b7970918c4fe183b38f985f25db5f1191c408fdcc57b1",
+        "bytes": 6463260,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1700074",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Jazz Brunch — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1700069",
+        "src": "bgm/usuan1700069.mp3",
+        "title": "Bossa Antigua",
+        "artist": "Kevin MacLeod",
+        "duration": 283.35025,
+        "sha256": "02241790f5e9ade5a714c347aa5b45e08a5c7fe2f6e527cea21af0414a8ea869",
+        "bytes": 5668093,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1700069",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Bossa Antigua — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1700068",
+        "src": "bgm/usuan1700068.mp3",
+        "title": "Backbay Lounge",
+        "artist": "Kevin MacLeod",
+        "duration": 266.5535,
+        "sha256": "43e28cd33132a7ff6a699740a069be70f08a759cf9a4c751003e691d4fcf4f0f",
+        "bytes": 5332158,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1700068",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Backbay Lounge — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan2300005",
+        "src": "bgm/usuan2300005.mp3",
+        "title": "Vibing Over Venus",
+        "artist": "Kevin MacLeod",
+        "duration": 411.14125,
+        "sha256": "752e244bbb367adf834eb4101f0cd43bf7439a8f6077734fb167bc27a815bb0f",
+        "bytes": 8223913,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN2300005",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Vibing Over Venus — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1100863",
+        "src": "bgm/usuan1100863.mp3",
+        "title": "Cool Vibes",
+        "artist": "Kevin MacLeod",
+        "duration": 218.38375,
+        "sha256": "4e9ec09c442cfc81c3349a29850400d400854f4c0d52d48961bfb817d2b6d797",
+        "bytes": 4368762,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1100863",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Cool Vibes — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1100479",
+        "src": "bgm/usuan1100479.mp3",
+        "title": "Backed Vibes (clean)",
+        "artist": "Kevin MacLeod",
+        "duration": 228.41475,
+        "sha256": "534b049badb46ef12ec967d45418d905fbcbb8f44ab7faaf6e72ef359f662134",
+        "bytes": 4569382,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1100479",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Backed Vibes (clean) — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1100185",
+        "src": "bgm/usuan1100185.mp3",
+        "title": "Just As Soon",
+        "artist": "Kevin MacLeod",
+        "duration": 228.10125,
+        "sha256": "553d3829aabf94e9907ef877935798d6e8e430509701bd3942a5afe4a9cf3adf",
+        "bytes": 4563113,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1100185",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Just As Soon — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1100174",
+        "src": "bgm/usuan1100174.mp3",
+        "title": "Long Stroll",
+        "artist": "Kevin MacLeod",
+        "duration": 254.693875,
+        "sha256": "eaed87c8730667c41dfe1d9636ea5dd731d01c443c1fc211ec5819a2213d86d4",
+        "bytes": 5094966,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1100174",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Long Stroll — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      }
+    ],
+    "duration": 2185.74725
+  },
+  "lofi": {
+    "name": "lofi風",
+    "tracks": [
+      {
+        "id": "usuan2100003",
+        "src": "bgm/usuan2100003.mp3",
+        "title": "Late Night Radio",
+        "artist": "Kevin MacLeod",
+        "duration": 263.601625,
+        "sha256": "d499122c7d1c66abd3a37b286e01eaa9f53644a5a66232aee2ccd3cd4d3b0399",
+        "bytes": 5273121,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN2100003",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Late Night Radio — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1200054",
+        "src": "bgm/usuan1200054.mp3",
+        "title": "Groove Grove",
+        "artist": "Kevin MacLeod",
+        "duration": 205.766625,
+        "sha256": "633ff2d70ee0c1fc2f54e88c3281cf967b1fb5fa45b2fe7d8a84583ed7964f9b",
+        "bytes": 4116419,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1200054",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Groove Grove — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1900016",
+        "src": "bgm/usuan1900016.mp3",
+        "title": "Sincerely",
+        "artist": "Kevin MacLeod",
+        "duration": 375.484125,
+        "sha256": "17a870aebb3af39af89a89f58ffc3782235d1886ceb64a30b164b88c965eb844",
+        "bytes": 7510770,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1900016",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Sincerely — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1900042",
+        "src": "bgm/usuan1900042.mp3",
+        "title": "Limit 70",
+        "artist": "Kevin MacLeod",
+        "duration": 301.662125,
+        "sha256": "cc0d0663bad7eab15c1eb308444054e98063c443de9988bac41203851afd2956",
+        "bytes": 6034329,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1900042",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Limit 70 — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1500035",
+        "src": "bgm/usuan1500035.mp3",
+        "title": "Universal",
+        "artist": "Kevin MacLeod",
+        "duration": 270.053875,
+        "sha256": "16c2268010cbb912fbf4b5ab3fb6227cca045cb9bcbc37a82fd9e0ac5dcc79ea",
+        "bytes": 5402166,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1500035",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Universal — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1600043",
+        "src": "bgm/usuan1600043.mp3",
+        "title": "Dreamer",
+        "artist": "Kevin MacLeod",
+        "duration": 204.068625,
+        "sha256": "c85f6186bedd35907abdb1f3e0726b36f91f1eaf8ce3b5726fd79f158f61de23",
+        "bytes": 4082460,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1600043",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Dreamer — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1500077",
+        "src": "bgm/usuan1500077.mp3",
+        "title": "Leopard Print Elevator",
+        "artist": "Kevin MacLeod",
+        "duration": 327.653875,
+        "sha256": "b9b474c4baaf202922271b3f51de0b0891bc447133d567beb91ce52dc7bbf97e",
+        "bytes": 6554166,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1500077",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Leopard Print Elevator — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      }
+    ],
+    "duration": 1924.2908750000001
+  },
+  "ambient": {
+    "name": "聴きやすい軽音楽",
+    "tracks": [
+      {
+        "id": "usuan1200076",
+        "src": "bgm/usuan1200076.mp3",
+        "title": "Easy Lemon",
+        "artist": "Kevin MacLeod",
+        "duration": 126.3805,
+        "sha256": "d9ca42d0ff942f6b1cb32b7d1e5322cfb4969ab26b82cb3e7b5d9d6dbfd8b2d2",
+        "bytes": 2528697,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1200076",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Easy Lemon — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1900015",
+        "src": "bgm/usuan1900015.mp3",
+        "title": "Almost Bliss",
+        "artist": "Kevin MacLeod",
+        "duration": 316.578,
+        "sha256": "06bd6576689e3c5621708a0ff270bc169eb8cc54e2445bf677bc03434aa1ab40",
+        "bytes": 6332648,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1900015",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Almost Bliss — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1200083",
+        "src": "bgm/usuan1200083.mp3",
+        "title": "Summer Day",
+        "artist": "Kevin MacLeod",
+        "duration": 198.0605,
+        "sha256": "d163d338daa8c87bc53019a83391d189ebe3e20c57f2f9eb2c8a36056881022a",
+        "bytes": 3962297,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1200083",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Summer Day — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1400037",
+        "src": "bgm/usuan1400037.mp3",
+        "title": "Carefree",
+        "artist": "Kevin MacLeod",
+        "duration": 205.139625,
+        "sha256": "37469bb673d8ab924d346ff870cd2d00776c82253cd2438db588097ea189beea",
+        "bytes": 4103880,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1400037",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Carefree — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1100757",
+        "src": "bgm/usuan1100757.mp3",
+        "title": "Windswept",
+        "artist": "Kevin MacLeod",
+        "duration": 208.344,
+        "sha256": "de8bb0fc857fc1fb8e8cf371d03b13551a52bd2c332a045384d8701288005d64",
+        "bytes": 4168142,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1100757",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Windswept — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1300046",
+        "src": "bgm/usuan1300046.mp3",
+        "title": "Dream Culture",
+        "artist": "Kevin MacLeod",
+        "duration": 214.36075,
+        "sha256": "152ea399a2511ce21ad81f75cecfdd756223e08d9b7121d8792167f9081ba12c",
+        "bytes": 4288305,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1300046",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Dream Culture — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1500074",
+        "src": "bgm/usuan1500074.mp3",
+        "title": "Fretless",
+        "artist": "Kevin MacLeod",
+        "duration": 336.065375,
+        "sha256": "895e648cb1eb67cedd17cc765cfa17344be4c8030a9f8f5e005f5418e595d9ed",
+        "bytes": 6722395,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1500074",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Fretless — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan2300002",
+        "src": "bgm/usuan2300002.mp3",
+        "title": "Evening",
+        "artist": "Kevin MacLeod",
+        "duration": 186.253125,
+        "sha256": "b8c9efc9551ec8412788b75d8cba825cd544ab940247f0fac6a759ff681cce9b",
+        "bytes": 3726150,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN2300002",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Evening — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      },
+      {
+        "id": "usuan1100799",
+        "src": "bgm/usuan1100799.mp3",
+        "title": "Enchanted Journey",
+        "artist": "Kevin MacLeod",
+        "duration": 269.557625,
+        "sha256": "e6a8bd6e972853beddfa8147283db74882050a099a16fe39f9c65dbebc0c3a07",
+        "bytes": 5392240,
+        "license": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "source_page": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1100799",
+        "rights_source_page": "https://incompetech.com/music/royalty-free/faq.html",
+        "attribution": "Enchanted Journey — Kevin MacLeod (incompetech.com), CC BY 4.0",
+        "attribution_required": true,
+        "selection_basis": "作者公式の楽器・雰囲気・説明から選定。音声・歌声・レコードノイズ・機械音が明記された作品を除外。聴感は未確認。",
+        "modifications": [
+          "音量調整",
+          "冒頭0.3秒・末尾0.5秒のフェード",
+          "MP3変換"
+        ]
+      }
+    ],
+    "duration": 2028.7395000000001
+  }
+}

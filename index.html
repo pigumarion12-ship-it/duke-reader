@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102033">
+<meta name="robots" content="noindex, nofollow, noarchive"><meta name="googlebot" content="noindex, nofollow, noarchive">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'">
+<title>DUKE 聴く読書室</title><meta name="description" content="新高値ブレイク投資法の読書版。全26章を読み、穏やかな声と好きな速さで聴く。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23102033'/%3E%3Cpath d='M9 9v14l15-7z' fill='%23e7b75b'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="bgm.css">
+</head>
+<body><main>
+<header><span class="brand">DUKE <span>聴く読書室</span></span><span class="badge">本文 全26章 · 音声 全26章</span></header>
+<div class="layout">
+<section class="player" aria-label="音声プレイヤー">
+<label class="chapterLabel" for="chapter">読む章を選ぶ</label><select id="chapter" class="chapterSelect" disabled><option>読み込み中…</option></select>
+<p id="chapterNumber" class="eyebrow">CHAPTER 01</p><h1 id="chapterTitle">株式投資を始める方へ</h1>
+<fieldset class="voiceChoice"><legend>朗読の声</legend><div id="voices"></div></fieldset><p id="voiceDescription" class="voice"></p>
+<div class="rule"></div><p id="sectionTitle" class="sectionTitle">読み込み中…</p><p id="status" role="status" aria-live="polite">本文を読み込んでいます</p>
+<input id="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="現在の区切りの再生位置" disabled>
+<div class="times"><span id="elapsed">0:00</span><span id="duration">0:00</span></div>
+<div class="controls"><button id="back" aria-label="15秒戻る" disabled>↶<small>15秒</small></button><button id="play" class="play" aria-label="再生" disabled>▶</button><button id="forward" aria-label="15秒進む" disabled>↷<small>15秒</small></button></div>
+<div class="settings"><label for="speed">再生速度</label><select id="speed"><option value="0.8">0.8倍</option><option value="1" selected>1倍</option><option value="1.25">1.25倍</option><option value="1.5">1.5倍</option><option value="1.75">1.75倍</option><option value="2">2倍</option><option value="2.5">2.5倍</option><option value="3">3倍</option></select></div>
+<fieldset class="bgmSettings"><legend>BGM</legend>
+<div class="bgmRow"><label for="bgmTrack">音を選ぶ</label><select id="bgmTrack"><option value="off">オフ</option><option value="rain">小雨 · 環境音</option><option value="waves">穏やかな波 · 環境音</option><option value="ambient">やわらかな音色 · 音楽</option></select></div>
+<div class="bgmRow bgmVolumeRow"><label for="bgmVolume">BGM音量</label><input id="bgmVolume" type="range" min="0" max="100" step="1" value="30"><output id="bgmVolumeValue" for="bgmVolume">30%</output></div>
+<button id="bgmPreview" class="bgmPreview" type="button" aria-pressed="false" disabled>BGMだけ試す</button>
+<p id="bgmStatus" class="bgmStatus" role="status" aria-live="polite">BGMはオフです。</p><p class="bgmHelp">BGMだけ試すときは朗読が一時停止します。<br>朗読を倍速にしても、BGMは通常の速さで流れます。<br><a href="bgm-long.html">30分以上のBGMを聴く</a> · <a href="bgm-credits.html">音源と利用条件</a></p>
+</fieldset>
+<p class="hint">再生位置と声・速度、BGMの音量は、この端末に保存します。<br>音声はAIによる朗読です。DUKEさん本人の声ではありません。</p>
+<a id="download" class="download" hidden download>音声を保存 ↓</a><audio id="audio" preload="metadata"></audio>
+</section>
+<section class="reading"><div class="listHeading"><h2>この章の区切り</h2><span id="total"></span></div><nav id="parts" aria-label="読む・聴く区切り"></nav>
+<details open><summary>本文を読む</summary><p class="textNote">講座をもとにした読書版。講座当時の内容です。</p><article id="transcript"></article>
+<div class="partPaging"><button id="previousPart">前の区切り</button><span id="partCount"></span><button id="nextPart">次の区切り</button></div></details>
+<footer>個人学習用 · 新高値ブレイク投資法<br>本文は要約せず、図番号・画像リンク・出典URLを省いて読み上げます。<br><a id="source" target="_blank" rel="noopener noreferrer">この章の出典</a></footer></section>
+</div></main><script src="app.js"></script><script src="long-bgm.js"></script><script src="bgm.js"></script></body></html>

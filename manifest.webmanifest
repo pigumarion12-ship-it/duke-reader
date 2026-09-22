@@ -1,0 +1,1 @@
+{"name": "DUKE 聴く読書室", "short_name": "DUKE読書", "lang": "ja", "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#102033", "theme_color": "#102033", "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png"}, {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}]}

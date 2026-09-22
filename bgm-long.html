@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; script-src &#x27;self&#x27;; style-src &#x27;self&#x27;; media-src &#x27;self&#x27;; connect-src &#x27;self&#x27;; img-src &#x27;self&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;; object-src &#x27;none&#x27;"><title>長く聴くBGM | DUKE</title>
+<link rel="stylesheet" href="bgm-listen.css"><script src="long-bgm.js" defer></script><script src="bgm-listen.js" defer></script></head>
+<body><a class="skip" href="#main">本文へ</a><header><a class="brand" href="index.html">DUKE<span>読書と音の時間</span></a>
+<nav aria-label="ページ移動"><a href="index.html">読書に戻る</a><a href="bgm-credits.html">音源について</a></nav></header>
+<main id="main"><section class="intro"><h1>長く、静かに聴くBGM</h1>
+<p>5種類のBGMを、曲や録音が順に変わる長めの構成にしました。聴きたい種類を選び、「再生」を押してください。</p></section>
+<noscript><p class="noscript">この試聴ページではJavaScriptが必要です。ブラウザの設定を確認してください。</p></noscript>
+<div class="layout"><fieldset><legend>聴きたいBGM</legend><div class="choices"><label class="choice"><input type="radio" name="bgmCategory" value="nature">
+<span><strong>自然音</strong><small>雨の強さや響きが移り変わる、長い自然録音。</small>
+<small>33分14秒 ／ 5本の音源</small></span></label><label class="choice"><input type="radio" name="bgmCategory" value="piano">
+<span><strong>ピアノクラシック</strong><small>バッハのピアノを、落ち着いた流れで。</small>
+<small>31分27秒 ／ 7本の音源</small></span></label><label class="choice"><input type="radio" name="bgmCategory" value="jazz">
+<span><strong>カフェジャズ</strong><small>穏やかなジャズをつなぐ、カフェのような時間。</small>
+<small>36分26秒 ／ 8本の音源</small></span></label><label class="choice"><input type="radio" name="bgmCategory" value="lofi">
+<span><strong>lofi風</strong><small>やわらかなリズムと音色を、控えめに。</small>
+<small>32分04秒 ／ 7本の音源</small></span></label><label class="choice"><input type="radio" name="bgmCategory" value="ambient">
+<span><strong>聴きやすい軽音楽</strong><small>聴きやすいインストゥルメンタルを順番に。</small>
+<small>33分49秒 ／ 9本の音源</small></span></label></div></fieldset>
+<section class="player" aria-label="再生操作"><h2 id="listenTitle">BGMを選ぶ</h2><p id="listenSubtitle" class="subtitle">音量は控えめから。朗読と重ねるときも、声が聴き取れる大きさで。</p>
+<button class="primary" id="listenPlay" type="button" disabled aria-pressed="false">再生</button>
+<button class="secondary" id="listenRestart" type="button" disabled>先頭から聴く</button>
+<div class="volume"><label for="listenVolume">BGMの音量 <output id="listenVolumeValue" for="listenVolume">62.5%</output></label>
+<input id="listenVolume" type="range" min="0" max="100" step="0.5" value="62.5" aria-valuetext="62.5%"></div>
+<p id="listenStatus" class="status" role="status" aria-live="polite">BGMの一覧を読み込んでいます…</p></section></div>
+<p class="note">1周するまで同じ曲・区間には戻りません。最後まで進むと、また先頭から再生します。曲の切り替わりは、前後の音がゆっくり重なります。</p>
+<p class="note">このページはBGMだけの試聴です。朗読と一緒に聴くときは<a href="index.html">読書ページ</a>へ。</p></main>
+<footer>朗読中のBGMは、読書ページでも選べます。</footer></body></html>

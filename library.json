@@ -724,7 +724,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch05-p003.96k.mp3",
-              "duration": 68.904
+              "duration": 70.256
             }
           },
           "textHash": "c0c5a89b1fe3c724c9e4aade7c265048f4e9fc31ae714d6361b0188452dc4784"
@@ -748,7 +748,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch05-p005.96k.mp3",
-              "duration": 58.648
+              "duration": 57.464
             }
           },
           "textHash": "5817be11b86eee15fadbe9fb33d6e4759cccc0676646d6c8692b6a2db4bd29c4"
@@ -760,7 +760,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch05-p006.96k.mp3",
-              "duration": 157.608
+              "duration": 158.52
             }
           },
           "textHash": "69c356d16ded788a917ca1cdef386b75dc99f0dc6872ec2df5ae2bf5bb2a2595"
@@ -772,7 +772,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch05-p007.96k.mp3",
-              "duration": 115.8
+              "duration": 109.92
             }
           },
           "textHash": "a7374a5866848687a43422abf41c920d0eb7032ee3fc86fbc6dd9ff861a4ef14"
@@ -784,7 +784,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch05-p008.96k.mp3",
-              "duration": 80.016
+              "duration": 84.864
             }
           },
           "textHash": "c1e2fc9203e0c32e452bf8c073a10d23a8cc7b3bee2064e8fe0a4f91301e904d"
@@ -1220,7 +1220,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch07-p016.96k.mp3",
-              "duration": 25.4
+              "duration": 27.6
             }
           },
           "textHash": "f310dfce9de95691a371b7e39f59d1723331487bc897675d6e97633b3fd82c41"
@@ -1276,7 +1276,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch08-p002.96k.mp3",
-              "duration": 126.712
+              "duration": 124.168
             }
           },
           "textHash": "d0daba8f6d118c18b76e0f8f45f311e8ca491e6ee3189ab00a133f408f72d610"
@@ -2064,7 +2064,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch09-p039.96k.mp3",
-              "duration": 129.76
+              "duration": 121.056
             }
           },
           "textHash": "9b2b2b190f1ea3fbb9c6f1c23716a096368c764b90770f768a940efdc2caa4ec"
@@ -2408,7 +2408,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch10-p025.96k.mp3",
-              "duration": 72.72
+              "duration": 76.648
             }
           },
           "textHash": "fab4cfd683b1cb3941075e9033d75fad2a5bbecff96c9ea1a77124cb10a88beb"
@@ -2420,7 +2420,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch10-p026.96k.mp3",
-              "duration": 149.552
+              "duration": 149.848
             }
           },
           "textHash": "6cca214685eb44561cf07df9b5fc87a67d03a56bc165a16c3c22bfc10ea06011"
@@ -3608,7 +3608,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch13-p042.96k.mp3",
-              "duration": 46.6
+              "duration": 46.72
             }
           },
           "textHash": "9265f5072313b01aa95ec97d42f3de6685dc03481e0dec1c1ccbc71d3f4fc230"
@@ -4140,7 +4140,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch15-p010.96k.mp3",
-              "duration": 110.248
+              "duration": 108.216
             }
           },
           "textHash": "23168a2e30d90f862c8db80d9a5300218e0a39408c10ab478cfc385ddb02d13a"
@@ -4408,7 +4408,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch17-p008.96k.mp3",
-              "duration": 115.048
+              "duration": 121.664
             }
           },
           "textHash": "fbf514d8ab61b17702a83ab7e80494f64b6c8a5edd6cf2c40052846b58e272ae"
@@ -4584,7 +4584,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch18-p006.96k.mp3",
-              "duration": 108.4
+              "duration": 103.368
             }
           },
           "textHash": "253bdfdf4962f34ceeb68dfd766736011d327a775004adc7cc91155618caed6a"
@@ -4596,7 +4596,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch18-p007.96k.mp3",
-              "duration": 29.216
+              "duration": 28.456
             }
           },
           "textHash": "a8724bde9c84ba0ddc816a86a029f90fb33816657d2a1bba6b1803da707f5e8e"
@@ -4632,7 +4632,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch18-p010.96k.mp3",
-              "duration": 117.0
+              "duration": 115.72
             }
           },
           "textHash": "1f0b72b60a51b7e432db76c80846df40b2d208253f429b3b0a7e7ba61d35d601"
@@ -4644,7 +4644,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch18-p011.96k.mp3",
-              "duration": 138.104
+              "duration": 141.752
             }
           },
           "textHash": "833b358fc4fc15de7100b1894652b06ad00701f2f2b4d6705f8a9c7857ed78c8"
@@ -4680,7 +4680,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch18-p014.96k.mp3",
-              "duration": 159.416
+              "duration": 149.616
             }
           },
           "textHash": "1daaeadbc9918cf17e18ff44ecda1bff531b4827091a069b93502fd129fb74ce"
@@ -4728,7 +4728,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch18-p018.96k.mp3",
-              "duration": 73.6
+              "duration": 67.648
             }
           },
           "textHash": "a180560212ebaca4c423c1d08a3bfc973a1020f9fdf86993b3ef4dd5fcfb8e6d"
@@ -4892,7 +4892,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch19-p011.96k.mp3",
-              "duration": 90.12
+              "duration": 94.056
             }
           },
           "textHash": "bf02e2c631b69f3fee22402091ecdceaebdba915a3c4fbf7bee8a17149b828d9"
@@ -5068,7 +5068,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch20-p005.96k.mp3",
-              "duration": 169.92
+              "duration": 173.208
             }
           },
           "textHash": "e12cba189ad0418e9ec8297a80970368a087ff4cafb7c0a84a44931a1a4a153d"
@@ -5188,7 +5188,7 @@
           "audio": {
             "onyx": {
               "file": "audio/onyx-b/ch20-p015.96k.mp3",
-              "duration": 141.752
+              "duration": 163.32
             }
           },
           "textHash": "49e5d5987c2f6c20c3fb650feb60ecbd8d66bf6c22c7f75c0253ec99be94712b"

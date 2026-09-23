@@ -4,15 +4,16 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102033">
 <meta name="robots" content="noindex, nofollow, noarchive"><meta name="googlebot" content="noindex, nofollow, noarchive">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'">
-<title>DUKE 聴く読書室</title><meta name="description" content="新高値ブレイク投資法の読書版。全26章を読み、穏やかな声と好きな速さで聴く。">
+<title>DUKE 聴く読書室</title><meta name="description" content="新高値ブレイク投資法の読書版。本編26章と補足講座12章を、好きな速さで読む・聴く。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23102033'/%3E%3Cpath d='M9 9v14l15-7z' fill='%23e7b75b'/%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="bgm.css">
 </head>
 <body><main>
-<header><span class="brand">DUKE <span>聴く読書室</span></span><span class="badge">本文 全26章 · 音声 全26章</span></header>
+<header><span class="brand">DUKE <span>聴く読書室</span></span><span id="collectionBadge" class="badge">本編26章＋補足12章</span></header>
 <div class="layout">
 <section class="player" aria-label="音声プレイヤー">
 <label class="chapterLabel" for="chapter">読む章を選ぶ</label><select id="chapter" class="chapterSelect" disabled><option>読み込み中…</option></select>
+<button id="supplementJump" class="supplementJump" type="button" hidden>補足講座から聴く</button>
 <p id="chapterNumber" class="eyebrow">CHAPTER 01</p><h1 id="chapterTitle">株式投資を始める方へ</h1>
 <fieldset class="voiceChoice"><legend>朗読の声</legend><div id="voices"></div></fieldset><p id="voiceDescription" class="voice"></p>
 <div class="rule"></div><p id="sectionTitle" class="sectionTitle">読み込み中…</p><p id="status" role="status" aria-live="polite">本文を読み込んでいます</p>
@@ -31,6 +32,7 @@
 </section>
 <section class="reading"><div class="listHeading"><h2>この章の区切り</h2><span id="total"></span></div><nav id="parts" aria-label="読む・聴く区切り"></nav>
 <details open><summary>本文を読む</summary><p class="textNote">講座をもとにした読書版。講座当時の内容です。</p><article id="transcript"></article>
+<details id="partSources" class="partSources" hidden><summary>この区切りの出典・動画時刻</summary><ul id="sourceList"></ul><p>リンク先は元の掲載ページです。動画内の時刻は表示範囲を参照してください。</p></details>
 <div class="partPaging"><button id="previousPart">前の区切り</button><span id="partCount"></span><button id="nextPart">次の区切り</button></div></details>
 <footer>個人学習用 · 新高値ブレイク投資法<br>本文は要約せず、図番号・画像リンク・出典URLを省いて読み上げます。<br><a id="source" target="_blank" rel="noopener noreferrer">この章の出典</a></footer></section>
 </div></main><script src="app.js"></script><script src="long-bgm.js"></script><script src="bgm.js"></script></body></html>

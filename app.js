@@ -33,16 +33,27 @@ function renderParts() {
   $('total').textContent=available.length===parts().length?time(available.reduce((n,p)=>n+p.audio[voice].duration,0)):available.length?`音声 ${available.length} / ${parts().length}区切り`:'音声は未生成';
 }
 function renderChapter() {
-  $('chapter').value=String(chapterIndex); $('chapterNumber').textContent='CHAPTER '+String(chapter().id).padStart(2,'0');
+  $('chapter').value=String(chapterIndex); $('chapterNumber').textContent=(chapter().collection==='supplement'?'補足講座 '+chapter().supplement_chapter+' · ':'')+'CHAPTER '+String(chapter().id).padStart(2,'0');
   $('chapterTitle').textContent=chapter().title; $('source').href=chapter().source;
   const complete=library.chapters.filter(c=>c.parts.every(p=>p.audio[voice])).length;
   $('voiceDescription').textContent=library.voices.find(v=>v.id===voice).description+' · '+complete+'章を収録';
   document.querySelectorAll('input[name="voice"]').forEach(input=>{input.checked=input.value===voice;input.disabled=!parts()[index].audio[input.value];});
   renderParts();
 }
+function renderSources() {
+  const sources=parts()[index].sources||[],list=$('sourceList');list.replaceChildren();
+  $('partSources').hidden=sources.length===0;
+  for(const source of sources){
+    let url;try{url=new URL(source.url);}catch{continue;}
+    if(url.protocol!=='https:'||url.hostname!=='investorduke.com')continue;
+    const item=document.createElement('li'),link=document.createElement('a'),range=document.createElement('span');
+    link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.book_id+' · '+source.title;
+    range.textContent=source.start+'〜'+source.end;item.append(link,range);list.append(item);
+  }
+}
 function renderPosition() {
   document.querySelectorAll('input[name="voice"]').forEach(input=>{input.disabled=!parts()[index].audio[input.value];});
-  $('sectionTitle').textContent=parts()[index].title; $('transcript').textContent=parts()[index].text;
+  $('sectionTitle').textContent=parts()[index].title; $('transcript').textContent=parts()[index].text; renderSources();
   $('partCount').textContent=`${index+1} / ${parts().length}`;
   $('previousPart').disabled=index===0; $('nextPart').disabled=index===parts().length-1;
   [...$('parts').children].forEach((b,i)=>{if(i===index)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');});
@@ -88,12 +99,21 @@ $('play').onclick=()=>audio.paused?void play():audio.pause();$('back').onclick=(
 $('speed').onchange=()=>{audio.playbackRate=Number($('speed').value);save();};
 $('seek').oninput=()=>{if(library&&recording()&&Number.isFinite(audio.duration)){pending=0;audio.currentTime=Number($('seek').value)*audio.duration/100;sync();save();}};
 $('chapter').onchange=()=>{const next=Number($('chapter').value);if(!Number.isInteger(next)||!library.chapters[next])return;const playing=!audio.paused;chapterIndex=next;index=0;restored=false;renderChapter();loadPart();if(playing)void play();};
+$('supplementJump').onclick=()=>{if(!library||library.chapters.length<38)return;$('chapter').value='26';$('chapter').onchange();};
 $('previousPart').onclick=()=>selectPart(index-1,!audio.paused);$('nextPart').onclick=()=>selectPart(index+1,!audio.paused);
 window.addEventListener('pagehide',save);document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
 (async()=>{try{
-  const response=await fetch('library.json',{cache:'no-cache'});if(!response.ok)throw Error('Library unavailable');library=await response.json();if(library.chapters.length!==26)throw Error('Incomplete library');
-  $('chapter').replaceChildren(...library.chapters.map((c,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent=`第${c.id}章 ${c.title}${c.parts.every(p=>p.audio.onyx)?"":" · 音声準備中"}`;return option;}));$('chapter').disabled=false;
-  library.voices.forEach(v=>{const label=document.createElement('label'),input=document.createElement('input'),name=document.createElement('span');input.type='radio';input.name='voice';input.value=v.id;input.onchange=()=>{if(input.checked)changeVoice(v.id);};const complete=library.chapters.filter(c=>c.parts.every(p=>p.audio[v.id]));const coverage=complete.length===26?'全26章':complete.every((c,i)=>c.id===i+1)&&complete.length?(complete.length===1?'第1章':`第1〜${complete.length}章`):`${complete.length}章収録`;name.textContent=`${v.name}（${coverage}）`;label.append(input,name);$('voices').append(label);});
+  const response=await fetch('library.json',{cache:'no-cache'});if(!response.ok)throw Error('Library unavailable');library=await response.json();if(![26,38].includes(library.chapters.length)||library.chapters.some((c,i)=>c.id!==i+1||!c.parts.length))throw Error('Incomplete library');
+  $('chapter').replaceChildren();
+  for(const [label, filter] of [['本編 第1〜26章',c=>c.id<=26],['補足講座 第27〜38章',c=>c.id>=27]]){
+    const group=document.createElement('optgroup');group.label=label;
+    library.chapters.forEach((c,i)=>{if(!filter(c))return;const option=document.createElement('option');option.value=String(i);option.textContent=`第${c.id}章 ${c.title}${c.parts.every(p=>p.audio.onyx)?'':' · 音声準備中'}`;group.append(option);});
+    if(group.children.length)$('chapter').append(group);
+  }
+  $('chapter').disabled=false;
+  $('supplementJump').hidden=library.chapters.length<38;
+  $('collectionBadge').textContent=library.chapters.length===38?'本編26章＋補足12章':'本編26章';
+  library.voices.forEach(v=>{const label=document.createElement('label'),input=document.createElement('input'),name=document.createElement('span');input.type='radio';input.name='voice';input.value=v.id;input.onchange=()=>{if(input.checked)changeVoice(v.id);};const complete=library.chapters.filter(c=>c.parts.every(p=>p.audio[v.id]));const coverage=complete.length===library.chapters.length?`全${library.chapters.length}章`:complete.every((c,i)=>c.id===i+1)&&complete.length?(complete.length===1?'第1章':`第1〜${complete.length}章`):`${complete.length}章収録`;name.textContent=`${v.name}（${coverage}）`;label.append(input,name);$('voices').append(label);});
   let state;try{state=JSON.parse(localStorage.getItem(key));if(!state){const legacy=JSON.parse(localStorage.getItem('duke-ch1-v1'));if(legacy)state={...legacy,chapter:0,voice:'coral'};}}catch{}
   voice=library.voices[0].id;
   if(state){if(Number.isInteger(state.chapter)&&library.chapters[state.chapter])chapterIndex=state.chapter;if(Number.isInteger(state.index)&&parts()[state.index])index=state.index;if(library.voices.some(v=>v.id===state.voice))voice=state.voice;if(speeds.includes(state.speed))$('speed').value=String(state.speed);restored=true;}

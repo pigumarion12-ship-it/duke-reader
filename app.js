@@ -55,7 +55,9 @@ function renderPosition() {
   document.querySelectorAll('input[name="voice"]').forEach(input=>{input.disabled=!parts()[index].audio[input.value];});
   $('sectionTitle').textContent=parts()[index].title; $('transcript').textContent=parts()[index].text; renderSources();
   $('partCount').textContent=`${index+1} / ${parts().length}`;
-  $('previousPart').disabled=index===0; $('nextPart').disabled=index===parts().length-1;
+  const atStart=chapterIndex===0&&index===0, atEnd=chapterIndex===library.chapters.length-1&&index===parts().length-1;
+  ['previousPart','previousPartTop'].forEach(id=>{$(id).disabled=atStart;});
+  ['nextPart','nextPartTop'].forEach(id=>{$(id).disabled=atEnd;});
   [...$('parts').children].forEach((b,i)=>{if(i===index)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');});
   const file=chapter().downloads[voice]||recording()?.file;
   $('download').hidden=!file;
@@ -75,6 +77,16 @@ async function play() {
   try{await audio.play();}catch(error){if(expected===loadId&&error.name!=='AbortError')status('再生できませんでした。再生ボタンをもう一度押してください。');}
 }
 function selectPart(i,autoplay=false){if(!Number.isInteger(i)||i<0||i>=parts().length)return;index=i;restored=false;loadPart();if(autoplay)void play();}
+function movePart(direction,autoplay=!audio.paused) {
+  if(!library||![1,-1].includes(direction))return;
+  let nextChapter=chapterIndex,nextIndex=index+direction;
+  if(nextIndex<0){nextChapter--;if(nextChapter<0)return;nextIndex=library.chapters[nextChapter].parts.length-1;}
+  else if(nextIndex>=parts().length){nextChapter++;if(nextChapter>=library.chapters.length)return;nextIndex=0;}
+  const chapterChanged=nextChapter!==chapterIndex;
+  chapterIndex=nextChapter;index=nextIndex;restored=false;
+  if(chapterChanged)renderChapter();
+  loadPart();if(autoplay)void play();
+}
 function changeVoice(next) {
   if(!library.voices.some(v=>v.id===next)||!parts()[index].audio[next])return;
   const wasPlaying=!audio.paused,d=Number.isFinite(audio.duration)?audio.duration:recording()?.duration||0,ratio=d?Math.min(1,position()/d):0;
@@ -100,7 +112,8 @@ $('speed').onchange=()=>{audio.playbackRate=Number($('speed').value);save();};
 $('seek').oninput=()=>{if(library&&recording()&&Number.isFinite(audio.duration)){pending=0;audio.currentTime=Number($('seek').value)*audio.duration/100;sync();save();}};
 $('chapter').onchange=()=>{const next=Number($('chapter').value);if(!Number.isInteger(next)||!library.chapters[next])return;const playing=!audio.paused;chapterIndex=next;index=0;restored=false;renderChapter();loadPart();if(playing)void play();};
 $('supplementJump').onclick=()=>{if(!library||library.chapters.length<38)return;$('chapter').value='26';$('chapter').onchange();};
-$('previousPart').onclick=()=>selectPart(index-1,!audio.paused);$('nextPart').onclick=()=>selectPart(index+1,!audio.paused);
+['previousPart','previousPartTop'].forEach(id=>{$(id).onclick=()=>movePart(-1);});
+['nextPart','nextPartTop'].forEach(id=>{$(id).onclick=()=>movePart(1);});
 window.addEventListener('pagehide',save);document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
 (async()=>{try{
   const response=await fetch('library.json',{cache:'no-cache'});if(!response.ok)throw Error('Library unavailable');library=await response.json();if(![26,38].includes(library.chapters.length)||library.chapters.some((c,i)=>c.id!==i+1||!c.parts.length))throw Error('Incomplete library');
@@ -118,5 +131,5 @@ window.addEventListener('pagehide',save);document.addEventListener('visibilitych
   voice=library.voices[0].id;
   if(state){if(Number.isInteger(state.chapter)&&library.chapters[state.chapter])chapterIndex=state.chapter;if(Number.isInteger(state.index)&&parts()[state.index])index=state.index;if(library.voices.some(v=>v.id===state.voice))voice=state.voice;if(speeds.includes(state.speed))$('speed').value=String(state.speed);restored=true;}
   renderChapter();loadPart(restored&&state.edition==='onyx-b-medium-v1'&&Number.isFinite(state.time)?state.time:0);
-  if('mediaSession'in navigator)for(const[name,fn]of Object.entries({play,pause:()=>audio.pause(),seekbackward:()=>skip(-15),seekforward:()=>skip(15),previoustrack:()=>selectPart(Math.max(0,index-1),true),nexttrack:()=>selectPart(Math.min(parts().length-1,index+1),true)})){try{navigator.mediaSession.setActionHandler(name,fn);}catch{}}
+  if('mediaSession'in navigator)for(const[name,fn]of Object.entries({play,pause:()=>audio.pause(),seekbackward:()=>skip(-15),seekforward:()=>skip(15),previoustrack:()=>movePart(-1),nexttrack:()=>movePart(1)})){try{navigator.mediaSession.setActionHandler(name,fn);}catch{}}
 }catch{status('本文を読み込めません。ページを開き直してください。');}})();

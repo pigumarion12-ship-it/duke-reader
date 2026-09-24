@@ -19,7 +19,8 @@
 <div class="rule"></div><p id="sectionTitle" class="sectionTitle">読み込み中…</p><p id="status" role="status" aria-live="polite">本文を読み込んでいます</p>
 <input id="seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="現在の区切りの再生位置" disabled>
 <div class="times"><span id="elapsed">0:00</span><span id="duration">0:00</span></div>
-<div class="controls"><button id="back" aria-label="15秒戻る" disabled>↶<small>15秒</small></button><button id="play" class="play" aria-label="再生" disabled>▶</button><button id="forward" aria-label="15秒進む" disabled>↷<small>15秒</small></button></div>
+<div class="controls"><button id="back" aria-label="15秒戻る" disabled>↶<small>15秒戻る</small></button><button id="play" class="play" aria-label="再生" disabled>▶</button><button id="forward" aria-label="15秒進む" disabled>↷<small>15秒進む</small></button></div>
+<div class="partNavigation" role="group" aria-label="区切りを移動"><button id="previousPartTop" type="button" disabled>← 前の区切り</button><button id="nextPartTop" type="button" disabled>次の区切り →</button></div>
 <div class="settings"><label for="speed">再生速度</label><select id="speed"><option value="0.8">0.8倍</option><option value="1" selected>1倍</option><option value="1.25">1.25倍</option><option value="1.5">1.5倍</option><option value="1.75">1.75倍</option><option value="2">2倍</option><option value="2.5">2.5倍</option><option value="3">3倍</option></select></div>
 <fieldset class="bgmSettings"><legend>BGM</legend>
 <div class="bgmRow"><label for="bgmTrack">音を選ぶ</label><select id="bgmTrack"><option value="off">オフ</option><option value="rain">小雨 · 環境音</option><option value="waves">穏やかな波 · 環境音</option><option value="ambient">やわらかな音色 · 音楽</option></select></div>
@@ -33,6 +34,6 @@
 <section class="reading"><div class="listHeading"><h2>この章の区切り</h2><span id="total"></span></div><nav id="parts" aria-label="読む・聴く区切り"></nav>
 <details open><summary>本文を読む</summary><p class="textNote">講座をもとにした読書版。講座当時の内容です。</p><article id="transcript"></article>
 <details id="partSources" class="partSources" hidden><summary>この区切りの出典・動画時刻</summary><ul id="sourceList"></ul><p>リンク先は元の掲載ページです。動画内の時刻は表示範囲を参照してください。</p></details>
-<div class="partPaging"><button id="previousPart">前の区切り</button><span id="partCount"></span><button id="nextPart">次の区切り</button></div></details>
+<div class="partPaging"><button id="previousPart" type="button" disabled>前の区切り</button><span id="partCount"></span><button id="nextPart" type="button" disabled>次の区切り</button></div></details>
 <footer>個人学習用 · 新高値ブレイク投資法<br>本文は要約せず、図番号・画像リンク・出典URLを省いて読み上げます。<br><a id="source" target="_blank" rel="noopener noreferrer">この章の出典</a></footer></section>
 </div></main><script src="app.js"></script><script src="long-bgm.js"></script><script src="bgm.js"></script></body></html>

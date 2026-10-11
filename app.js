@@ -10,7 +10,7 @@ const recording = () => parts()[index].audio[voice];
 const position = () => pending || (Number.isFinite(audio.currentTime) ? audio.currentTime : 0);
 function save() {
   if (!library || switching) return;
-  try { localStorage.setItem(key,JSON.stringify({chapter:chapterIndex,index,voice,edition:'onyx-b-medium-v1',time:position(),speed:Number($('speed').value)})); } catch {}
+  try { localStorage.setItem(key,JSON.stringify({chapter:chapterIndex,chapterId:chapter().id,index,voice,edition:'onyx-b-medium-v1',time:position(),speed:Number($('speed').value)})); } catch {}
 }
 function status(message) { $('status').textContent=message; }
 function playState(playing) { $('play').textContent=playing?'Ⅱ':'▶'; $('play').setAttribute('aria-label',playing?'一時停止':'再生'); }
@@ -34,7 +34,7 @@ function renderParts() {
 }
 function renderChapter() {
   $('chapter').value=String(chapterIndex); $('chapterNumber').textContent=(chapter().collection==='supplement'?'補足講座 '+chapter().supplement_chapter+' · ':'')+'CHAPTER '+String(chapter().id).padStart(2,'0');
-  $('chapterTitle').textContent=chapter().title; $('source').href=chapter().source;
+  $('chapterTitle').textContent=chapter().title; $('source').removeAttribute('href');try{const u=new URL(chapter().source);if(u.protocol==='https:'&&u.hostname==='investorduke.com'&&!u.username&&!u.password&&(!u.port||u.port==='443'))$('source').href=u.href;}catch{}
   const complete=library.chapters.filter(c=>c.parts.every(p=>p.audio[voice])).length;
   $('voiceDescription').textContent=library.voices.find(v=>v.id===voice).description+' · '+complete+'章を収録';
   document.querySelectorAll('input[name="voice"]').forEach(input=>{input.checked=input.value===voice;input.disabled=!parts()[index].audio[input.value];});
@@ -45,7 +45,7 @@ function renderSources() {
   $('partSources').hidden=sources.length===0;
   for(const source of sources){
     let url;try{url=new URL(source.url);}catch{continue;}
-    if(url.protocol!=='https:'||url.hostname!=='investorduke.com')continue;
+    if(url.protocol!=='https:'||url.hostname!=='investorduke.com'||url.username||url.password||(url.port&&url.port!=='443'))continue;
     const item=document.createElement('li'),link=document.createElement('a'),range=document.createElement('span');
     link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.book_id+' · '+source.title;
     range.textContent=source.start+'〜'+source.end;item.append(link,range);list.append(item);
@@ -116,20 +116,20 @@ $('supplementJump').onclick=()=>{if(!library||library.chapters.length<38)return;
 ['nextPart','nextPartTop'].forEach(id=>{$(id).onclick=()=>movePart(1);});
 window.addEventListener('pagehide',save);document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
 (async()=>{try{
-  const response=await fetch('library.json',{cache:'no-cache'});if(!response.ok)throw Error('Library unavailable');library=await response.json();if(![26,38].includes(library.chapters.length)||library.chapters.some((c,i)=>c.id!==i+1||!c.parts.length))throw Error('Incomplete library');
+  const response=await fetch('library.json',{cache:'no-cache'});if(!response.ok)throw Error('Library unavailable');library=await response.json();if(!(library.chapters.length===26||(library.chapters.length>=38&&library.chapters.length<=79))||library.chapters.some((c,i)=>!Number.isInteger(c.id)||!c.parts.length||(i<38?c.id!==i+1:c.id<=library.chapters[i-1].id||c.id<39||c.id>79||c.parts.some(p=>!p.audio?.onyx))))throw Error('Incomplete library');
   $('chapter').replaceChildren();
-  for(const [label, filter] of [['本編 第1〜26章',c=>c.id<=26],['補足講座 第27〜38章',c=>c.id>=27]]){
+  for(const [label, filter] of [['本編 第1〜26章',c=>c.id<=26],['補足講座 第27〜38章',c=>c.id>=27&&c.id<=38],['補足・講座別',c=>c.id>=39]]){
     const group=document.createElement('optgroup');group.label=label;
     library.chapters.forEach((c,i)=>{if(!filter(c))return;const option=document.createElement('option');option.value=String(i);option.textContent=`第${c.id}章 ${c.title}${c.parts.every(p=>p.audio.onyx)?'':' · 音声準備中'}`;group.append(option);});
     if(group.children.length)$('chapter').append(group);
   }
   $('chapter').disabled=false;
   $('supplementJump').hidden=library.chapters.length<38;
-  $('collectionBadge').textContent=library.chapters.length===38?'本編26章＋補足12章':'本編26章';
+  $('collectionBadge').textContent=library.chapters.length>=38?'本編26章＋補足12章'+(library.chapters.length>38?'＋講座別'+(library.chapters.length-38)+'講座':''):'本編26章';
   library.voices.forEach(v=>{const label=document.createElement('label'),input=document.createElement('input'),name=document.createElement('span');input.type='radio';input.name='voice';input.value=v.id;input.onchange=()=>{if(input.checked)changeVoice(v.id);};const complete=library.chapters.filter(c=>c.parts.every(p=>p.audio[v.id]));const coverage=complete.length===library.chapters.length?`全${library.chapters.length}章`:complete.every((c,i)=>c.id===i+1)&&complete.length?(complete.length===1?'第1章':`第1〜${complete.length}章`):`${complete.length}章収録`;name.textContent=`${v.name}（${coverage}）`;label.append(input,name);$('voices').append(label);});
   let state;try{state=JSON.parse(localStorage.getItem(key));if(!state){const legacy=JSON.parse(localStorage.getItem('duke-ch1-v1'));if(legacy)state={...legacy,chapter:0,voice:'coral'};}}catch{}
   voice=library.voices[0].id;
-  if(state){if(Number.isInteger(state.chapter)&&library.chapters[state.chapter])chapterIndex=state.chapter;if(Number.isInteger(state.index)&&parts()[state.index])index=state.index;if(library.voices.some(v=>v.id===state.voice))voice=state.voice;if(speeds.includes(state.speed))$('speed').value=String(state.speed);restored=true;}
+  if(state){const byId=Number.isInteger(state.chapterId)?library.chapters.findIndex(c=>c.id===state.chapterId):-1;if(byId>=0)chapterIndex=byId;else if(Number.isInteger(state.chapter)&&library.chapters[state.chapter])chapterIndex=state.chapter;if(Number.isInteger(state.index)&&parts()[state.index])index=state.index;if(library.voices.some(v=>v.id===state.voice))voice=state.voice;if(speeds.includes(state.speed))$('speed').value=String(state.speed);restored=true;}
   renderChapter();loadPart(restored&&state.edition==='onyx-b-medium-v1'&&Number.isFinite(state.time)?state.time:0);
   if('mediaSession'in navigator)for(const[name,fn]of Object.entries({play,pause:()=>audio.pause(),seekbackward:()=>skip(-15),seekforward:()=>skip(15),previoustrack:()=>movePart(-1),nexttrack:()=>movePart(1)})){try{navigator.mediaSession.setActionHandler(name,fn);}catch{}}
 }catch{status('本文を読み込めません。ページを開き直してください。');}})();

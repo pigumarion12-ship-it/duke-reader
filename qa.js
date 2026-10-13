@@ -42,7 +42,7 @@
     const byId = id => document.getElementById(id);
     const player = byId('audio'), playButton = byId('audio-play'), reloadButton = byId('audio-reload'), partSelect = byId('audio-part'), speedSelect = byId('audio-speed'), openAudio = byId('audio-open');
     const storageKey = 'duke-qa-reader-v1';
-    let items = [], current = 0, partIndex = 0, pending = 0, lastTime = 0, needsReload = false, switching = false, loadId = 0, dataId = 0, controller;
+    let items = [], current = 0, partIndex = 0, pending = 0, lastTime = 0, needsReload = false, switching = false, canContinue = false, loadId = 0, dataId = 0, controller;
     let saved = {};
     try { const value = JSON.parse(localStorage.getItem(storageKey)); if (value && typeof value === 'object') saved = value; } catch { /* Storage may be disabled. */ }
     speedSelect.value = String(speeds.includes(saved.speed) ? saved.speed : 1);
@@ -91,7 +91,7 @@
     function setPart(index, autoplay = false, seconds = 0) {
       const part = item()?.audio[index];
       if (!part || !isAllowedFile(part.file, item().order, index + 1)) return;
-      switching = true; loadId++; player.pause(); partIndex = index;
+      switching = true; canContinue = false; loadId++; player.pause(); partIndex = index;
       pending = Number.isFinite(seconds) ? Math.max(0, Math.min(seconds, part.duration)) : 0;
       lastTime = pending; needsReload = false; partSelect.value = String(index);
       player.src = part.file; player.load(); player.playbackRate = Number(speedSelect.value); player.preservesPitch = true;
@@ -104,13 +104,15 @@
       if (retry && (needsReload || player.error)) setPart(partIndex, false, position());
       const expected = loadId;
       try { await player.play(); } catch (error) {
-        if (expected !== loadId || error?.name === 'AbortError') return;
+        if (expected !== loadId) return;
+        canContinue = false;
+        if (error?.name === 'AbortError') return;
         if (player.error || ['NotSupportedError', 'NetworkError'].includes(error?.name)) needsReload = true;
         buttons(); fallback(true); message(errorMessage(error));
       }
     }
     function clearAudio() {
-      switching = true; loadId++; player.pause(); player.removeAttribute('src'); player.load();
+      switching = true; canContinue = false; loadId++; player.pause(); player.removeAttribute('src'); player.load();
       partIndex = 0; pending = 0; lastTime = 0; needsReload = false; switching = false;
       partSelect.replaceChildren(); fallback(); buttons();
     }
@@ -125,7 +127,7 @@
       }
       byId('qa-list').replaceChildren(fragment);
     }
-    function selectQuestion(index, restoreSaved = false) {
+    function selectQuestion(index, restoreSaved = false, autoplay = false) {
       if (!Number.isInteger(index) || !items[index]) return;
       current = index; clearAudio();
       const q = item();
@@ -141,7 +143,19 @@
       if (!q.audio.length) { buttons(); message('音声は準備中です。本文は読めます。'); persist(); return; }
       q.audio.forEach((part, index) => { const option = node('option', `区切り ${index + 1} / ${q.audio.length}`); option.value = String(index); partSelect.append(option); });
       const resume = restoreSaved && saved.id === q.id && saved.textHash === q.spoken_text_sha256 && Number.isInteger(saved.partIndex) && saved.partIndex >= 0 && saved.partIndex < q.audio.length;
-      setPart(resume ? saved.partIndex : 0, false, resume && Number.isFinite(saved.time) ? saved.time : 0);
+      setPart(resume ? saved.partIndex : 0, autoplay, resume && Number.isFinite(saved.time) ? saved.time : 0);
+    }
+    function continueReading() {
+      if (switching || !canContinue || !player.ended || player.error || needsReload || !recording()) return;
+      canContinue = false;
+      if (partIndex + 1 < item().audio.length) { setPart(partIndex + 1, true); return; }
+      const next = items.findIndex((q, index) => index > current && q.audio.length > 0);
+      if (next >= 0) {
+        history.replaceState(null, '', '#' + encodeURIComponent(items[next].id));
+        selectQuestion(next, false, true);
+      } else {
+        buttons(); message('質問と回答を最後まで聴き終えました。'); persist();
+      }
     }
     function fromHash(initial = false) {
       if (!items.length) return;
@@ -173,7 +187,7 @@
         if (expected === dataId) { byId('retry-data').disabled = false; byId('reading').setAttribute('aria-busy', 'false'); }
       }
     }
-    playButton.addEventListener('click', () => { if (player.paused || needsReload || player.error) void play(true); else player.pause(); });
+    playButton.addEventListener('click', () => { if (player.paused || needsReload || player.error) void play(true); else { canContinue = false; player.pause(); } });
     reloadButton.addEventListener('click', () => { if (recording()) { setPart(partIndex, false, position()); void play(); } });
     partSelect.addEventListener('change', () => setPart(Number(partSelect.value), !player.paused));
     speedSelect.addEventListener('change', () => { if (!speeds.includes(Number(speedSelect.value))) speedSelect.value = '1'; player.playbackRate = Number(speedSelect.value); player.preservesPitch = true; persist(); });
@@ -183,13 +197,13 @@
     player.addEventListener('loadedmetadata', () => { restore(); player.playbackRate = Number(speedSelect.value); });
     player.addEventListener('canplay', restore);
     player.addEventListener('timeupdate', () => { if (!player.error && !needsReload && !pending && Number.isFinite(player.currentTime)) lastTime = player.currentTime; if (!switching) persist(); });
-    player.addEventListener('play', () => { buttons(); message('音声を読み込んでいます…'); });
+    player.addEventListener('play', () => { if (!recording() || player.paused || player.error) return; canContinue = true; buttons(); message('音声を読み込んでいます…'); });
     player.addEventListener('playing', () => { if (recording() && !player.paused && !player.error) { needsReload = false; restore(); buttons(); fallback(); message('再生中 · Onyx B（AI音声）'); } });
     player.addEventListener('waiting', () => { if (recording() && !player.paused && !player.error) message('音声の続きを読み込んでいます…'); });
     player.addEventListener('stalled', () => { if (recording() && !player.paused && !player.error) message('音声の読み込みを待っています。止まったままなら「音声を読み込み直す」を押してください。'); });
-    player.addEventListener('pause', () => { if (!switching && recording()) { buttons(); persist(); if (!player.error && !needsReload && !player.ended) message('一時停止'); } });
-    player.addEventListener('error', () => { if (switching || !recording()) return; if (Number.isFinite(player.currentTime) && player.currentTime > 0) lastTime = player.currentTime; needsReload = true; buttons(); fallback(true); message(errorMessage()); });
-    player.addEventListener('ended', () => { if (partIndex + 1 < item()?.audio.length) setPart(partIndex + 1, true); else { buttons(); message('この質問と回答を聴き終えました。'); persist(); } });
+    player.addEventListener('pause', () => { if (!switching && recording() && player.paused) { if (!player.ended) canContinue = false; buttons(); persist(); if (!player.error && !needsReload && !player.ended) message('一時停止'); } });
+    player.addEventListener('error', () => { if (switching || !recording()) return; canContinue = false; if (Number.isFinite(player.currentTime) && player.currentTime > 0) lastTime = player.currentTime; needsReload = true; buttons(); fallback(true); message(errorMessage()); });
+    player.addEventListener('ended', continueReading);
     byId('retry-data').addEventListener('click', load);
     byId('skip-to-reading').addEventListener('click', event => {
       event.preventDefault();
@@ -197,7 +211,7 @@
       byId('reading').scrollIntoView({ block: 'start' });
     });
     addEventListener('hashchange', () => fromHash());
-    addEventListener('pagehide', () => { persist(); player.pause(); });
+    addEventListener('pagehide', () => { canContinue = false; persist(); player.pause(); });
     void load();
   }
   return Object.freeze({ isAllowedFile, sourceURL, validate, mount });

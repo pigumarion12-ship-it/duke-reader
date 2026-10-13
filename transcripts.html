@@ -12,7 +12,7 @@
   <meta name="description" content="補足41講座の読み上げ用に整えた文章と、元の書き起こしを読むページです。">
   <link rel="stylesheet" href="transcripts.css?v=20261013-retry1">
   <script src="audio-source.js" defer></script>
-  <script src="transcripts.js?v=20261013-retry1" defer></script>
+  <script src="transcripts.js?v=20261013-autoplay1" defer></script>
 </head>
 <body>
   <a id="skip-to-reading" class="skip-link" href="#reading">本文へ移動</a>
@@ -65,6 +65,7 @@
           </div>
           <p id="audio-status" class="lecture-status" role="status" aria-live="polite"></p>
           <div id="narration-controls" hidden>
+            <p class="lecture-status">区切りや講座が終わると、次の音声へ続けて進みます。音声のない講座は飛ばします。</p>
             <label for="narration-part">聴く区切り</label>
             <select id="narration-part"></select>
             <button id="audio-play" class="audio-play" type="button" disabled>▶ 再生する</button>

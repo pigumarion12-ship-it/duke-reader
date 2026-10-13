@@ -37,6 +37,7 @@
   const openAudio = byId("audio-open");
   let audioLoadId = 0, audioPendingTime = 0, audioLastTime = 0;
   let audioNeedsReload = false, audioSwitching = false;
+  let audioPlaybackStarted = false;
 
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -294,6 +295,13 @@
     const recording = audioParts[audioIndex]?.audio?.onyx;
     return recording && DukeAudioSource.isAllowedFile(recording.file) ? recording : null;
   }
+  function playableParts(lecture) {
+    const chapter = library.chapters.find(c => c.source === lecture.source_url);
+    const parts = chapter?.parts;
+    return Array.isArray(parts) && parts.length > 0 &&
+      parts.every(part => part.audio?.onyx?.file && DukeAudioSource.isAllowedFile(part.audio.onyx.file))
+      ? parts : [];
+  }
   function audioPosition() {
     return audioPendingTime || (player.error || audioNeedsReload ? audioLastTime : Number.isFinite(player.currentTime) ? player.currentTime : 0);
   }
@@ -347,18 +355,19 @@
     try { await player.play(); }
     catch (error) {
       if (expected !== audioLoadId || error?.name === "AbortError") return;
+      audioPlaybackStarted = false;
       if (player.error || error?.name === "NotSupportedError" || error?.name === "NetworkError") audioNeedsReload = true;
       renderAudioButton(); audioFallback(true); audioMessage(audioErrorMessage(error));
     }
   }
   function renderAudio(lecture) {
+    audioPlaybackStarted = false;
     audioSwitching = true; audioLoadId++; player.pause();
     player.removeAttribute("src");
     player.load();
     audioIndex = 0; audioPendingTime = 0; audioLastTime = 0; audioNeedsReload = false;
-    const chapter = library.chapters.find(c => c.source === lecture.source_url);
-    audioParts = chapter?.parts?.filter(p => p.audio?.onyx?.file && DukeAudioSource.isAllowedFile(p.audio.onyx.file)) || [];
-    const complete = audioParts.length > 0 && audioParts.length === chapter.parts.length;
+    audioParts = playableParts(lecture);
+    const complete = audioParts.length > 0;
     audioSwitching = false; renderAudioButton(); audioFallback();
     byId("narration-controls").hidden = !complete;
     byId("audio-status").textContent = complete ? "Onyx B · 深みのある穏やかさ。声はAIで生成しています。" : ["RSI", "0405", "20260406"].includes(lecture.code) ? "音声化は見送りました。文字版は読めます。" : "この講座の音声はありません。文字版は読めます。";
@@ -377,7 +386,7 @@
   partSelect.addEventListener("change", () => setAudioPart(Number(partSelect.value), !player.paused));
   playButton.addEventListener("click", () => {
     if (player.paused || player.error || audioNeedsReload) void playAudio(true);
-    else player.pause();
+    else { audioPlaybackStarted = false; player.pause(); }
   });
   reloadAudio.addEventListener("click", () => {
     if (!activeAudio()) return;
@@ -388,26 +397,45 @@
   byId("audio-previous").addEventListener("click", () => { if (audioIndex > 0) setAudioPart(audioIndex - 1, !player.paused); });
   byId("audio-next").addEventListener("click", () => { if (audioIndex + 1 < audioParts.length) setAudioPart(audioIndex + 1, !player.paused); });
   player.addEventListener("ended", () => {
-    if (audioIndex + 1 < audioParts.length) setAudioPart(audioIndex + 1, true);
-    else { renderAudioButton(); audioMessage("この講座の音声を聴き終えました。"); }
+    if (!player.ended || player.error || audioNeedsReload || !audioPlaybackStarted) return;
+    if (audioIndex + 1 < audioParts.length) {
+      setAudioPart(audioIndex + 1, true);
+      return;
+    }
+    const current = lectures.findIndex(lecture => lecture.code === currentCode);
+    const next = current < 0 ? undefined : lectures.slice(current + 1).find(lecture => playableParts(lecture).length > 0);
+    if (next) {
+      // Select and play in this event, without waiting for a hashchange callback.
+      window.history.replaceState(null, "", `#${encodeURIComponent(next.code)}`);
+      selectFromHash();
+      void playAudio();
+    } else {
+      audioPlaybackStarted = false;
+      renderAudioButton();
+      audioMessage("最後の講座の音声を聴き終えました。");
+    }
   });
   player.addEventListener("loadedmetadata", () => { restoreAudioPosition(); player.playbackRate = Number(speedSelect.value); });
   player.addEventListener("canplay", restoreAudioPosition);
   player.addEventListener("timeupdate", () => { if (!player.error && !audioNeedsReload && !audioPendingTime && Number.isFinite(player.currentTime)) audioLastTime = player.currentTime; });
-  player.addEventListener("play", () => { renderAudioButton(); audioMessage("音声を読み込んでいます…"); });
+  player.addEventListener("play", () => {
+    if (player.paused || player.error || !activeAudio()) return;
+    audioPlaybackStarted = true; renderAudioButton(); audioMessage("音声を読み込んでいます…");
+  });
   player.addEventListener("playing", () => {
     if (!activeAudio() || player.paused || player.error) return;
     audioNeedsReload = false; restoreAudioPosition(); renderAudioButton(); audioFallback(); audioMessage("再生中 · Onyx B（AI音声）");
   });
   player.addEventListener("waiting", () => { if (activeAudio() && !player.paused && !player.error) audioMessage("音声の続きを読み込んでいます…"); });
   player.addEventListener("stalled", () => { if (activeAudio() && !player.paused && !player.error) audioMessage("音声の読み込みを待っています。通信状態を確認してください。"); });
-  player.addEventListener("pause", () => { if (!audioSwitching && activeAudio()) { renderAudioButton(); if (!player.error && !audioNeedsReload && !player.ended) audioMessage("一時停止"); } });
+  player.addEventListener("pause", () => { if (!audioSwitching && activeAudio() && player.paused) { renderAudioButton(); if (!player.ended) { audioPlaybackStarted = false; if (!player.error && !audioNeedsReload) audioMessage("一時停止"); } } });
   player.addEventListener("error", () => {
     if (audioSwitching || !activeAudio()) return;
+    audioPlaybackStarted = false;
     if (Number.isFinite(player.currentTime) && player.currentTime > 0) audioLastTime = player.currentTime;
     audioNeedsReload = true; renderAudioButton(); audioFallback(true); audioMessage(audioErrorMessage());
   });
-  window.addEventListener("pagehide", () => player.pause());
+  window.addEventListener("pagehide", () => { audioPlaybackStarted = false; player.pause(); });
 
   ui.skip.addEventListener("click", (event) => {
     event.preventDefault();

@@ -101,3 +101,13 @@ button:disabled, input:disabled { opacity: .6; cursor: wait; }
   .lecture-paging { gap: 8px; }
   .paging-link, .paging-edge { padding: 10px; }
 }
+
+.reading-tools { margin: 1.3rem 0; padding: 1rem; border: 1px solid #d0d7df; border-radius: 12px; }
+.edition-switch, .audio-actions { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+.edition-switch button[aria-pressed="true"] { background: #19394c; color: #fff; border-color: #19394c; }
+.reading-tools select { max-width: 100%; font: inherit; padding: .5rem; }
+.reading-tools audio { display: block; width: 100%; margin: .8rem 0; }
+.reading-paragraph { border-bottom: 1px solid #dce2e7; padding: 1rem 0; }
+.reading-paragraph p { white-space: pre-wrap; line-height: 1.95; overflow-wrap: anywhere; }
+.reading-paragraph.uncertain { border-left: 3px solid #ba9a60; padding-left: 1rem; }
+.reading-note { font-size: .85rem; color: #715526; }

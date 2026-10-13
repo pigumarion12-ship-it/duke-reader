@@ -24,6 +24,14 @@
   let lectures = [];
   let currentCode = "";
   let loading = false;
+  let editions = new Map();
+  let library = { chapters: [] };
+  let view = "reading";
+  let audioParts = [];
+  let audioIndex = 0;
+  const player = byId("narration");
+  const partSelect = byId("narration-part");
+  const speedSelect = byId("narration-speed");
 
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -112,7 +120,7 @@
     ui.emptySearch.hidden = matches.length > 0;
     ui.searchResult.textContent = query
       ? `${lectures.length}講座のうち${matches.length}講座が見つかりました。`
-      : `${lectures.length}講座から選べます。準備中の講座も表示しています。`;
+      : `${lectures.length}講座から選べます。${lectures.some((lecture) => lecture.status === "pending") ? "準備中の講座も表示しています。" : ""}`;
   }
 
   function timestamp(milliseconds) {
@@ -144,12 +152,27 @@
   }
 
   function renderTranscript(lecture) {
+    const edited = editions.get(lecture.code);
+    byId("edition-reading").setAttribute("aria-pressed", String(view === "reading"));
+    byId("edition-source").setAttribute("aria-pressed", String(view === "source"));
+    if (view === "reading" && edited) {
+      const fragment = document.createDocumentFragment();
+      for (const paragraph of edited.paragraphs) {
+        const row = element("section", "reading-paragraph" + (paragraph.uncertain ? " uncertain" : ""));
+        row.append(element("span", "cue-time", `${timestamp(paragraph.start_ms)}–${timestamp(paragraph.end_ms)}`));
+        row.append(element("p", "", paragraph.text));
+        if (paragraph.uncertain) row.append(element("small", "reading-note", "この段落には、字幕・書き起こしだけでは確定できない箇所があります。"));
+        fragment.append(row);
+      }
+      ui.transcript.replaceChildren(fragment);
+      return;
+    }
     if (lecture.status === "pending") {
       ui.transcript.replaceChildren(element("p", "message", "この講座の書き起こしは準備中です"));
       return;
     }
     const list = element("ol", "cue-list");
-    list.setAttribute("aria-label", "時刻付きの書き起こし");
+    list.setAttribute("aria-label", lecture.code === "20210414" ? "音声区間ごとの書き起こし" : "時刻付きの書き起こし");
     for (const cue of lecture.cues) {
       const row = element("li", "cue");
       const time = element("span", "cue-time", `${timestamp(cue.start_ms)}–${timestamp(cue.end_ms)}`);
@@ -173,6 +196,7 @@
     const missing = Boolean(window.location.hash) && index < 0;
     if (index < 0) index = 0;
     const lecture = lectures[index];
+    const changedLecture = currentCode !== lecture.code;
     currentCode = lecture.code;
     if (requested !== currentCode) {
       window.history.replaceState(null, "", `#${encodeURIComponent(currentCode)}`);
@@ -185,11 +209,16 @@
     if (url) ui.source.href = url;
     ui.status.textContent = missing
       ? "指定された講座が見つからなかったため、最初の講座を表示しています。"
-      : lecture.status === "available" ? "時刻は元動画の位置です。" : "";
+      : view === "reading"
+        ? "AIが整えた読み上げ用の文章です。原音との全編照合は未実施です。時刻は元の書き起こしに対応します。"
+        : lecture.code === "20210414"
+          ? "音声からの自動書き起こしです。時刻は約5分の音声区間で、文ごとの時刻ではありません。"
+          : "保存字幕をそのまま表示しています。時刻は元動画の位置です。";
     document.title = `${lecture.title} | DUKE 講座の書き起こし`;
     renderCatalog();
     renderPaging(index);
     renderTranscript(lecture);
+    if (changedLecture) renderAudio(lecture);
     if (focus) focusReading();
   }
 
@@ -214,6 +243,24 @@
       });
       if (!response.ok) throw new Error("Could not load catalog");
       const data = await response.json();
+      const [editedResponse, libraryResponse] = await Promise.all([
+        fetch("./reading-edition.json", { credentials: "same-origin", mode: "same-origin", redirect: "error", signal: controller.signal }),
+        fetch("./library.json", { credentials: "same-origin", mode: "same-origin", redirect: "error", signal: controller.signal }),
+      ]);
+      if (!editedResponse.ok || !libraryResponse.ok) throw new Error("Could not load reading edition");
+      const edited = await editedResponse.json();
+      library = DukeAudioSource.validateLibrary(await libraryResponse.json());
+      if (!Array.isArray(edited.lectures) || edited.lectures.length !== data.total || !Array.isArray(library.chapters)) throw new Error("Invalid reading edition");
+      editions = new Map();
+      for (const lecture of edited.lectures) {
+        if (!lecture || typeof lecture.code !== "string" || editions.has(lecture.code) || !data.lectures.some(l => l.code === lecture.code) ||
+            !Array.isArray(lecture.paragraphs) || !lecture.paragraphs.length) throw new Error("Invalid reading lecture");
+        for (const p of lecture.paragraphs) {
+          if (!p || typeof p.text !== "string" || !p.text.trim() || !Number.isInteger(p.start_ms) || !Number.isInteger(p.end_ms) ||
+              p.start_ms < 0 || p.end_ms < p.start_ms || typeof p.uncertain !== "boolean") throw new Error("Invalid reading paragraph");
+        }
+        editions.set(lecture.code, lecture);
+      }
       lectures = validate(data);
       ui.count.textContent = `全${data.total}講座`;
       ui.search.disabled = false;
@@ -237,6 +284,49 @@
       loading = false;
     }
   }
+
+  function setAudioPart(index, autoplay = false) {
+    player.pause();
+    audioIndex = index;
+    const part = audioParts[index];
+    if (!part) return;
+    byId("audio-status").textContent = "Onyx B · 深みのある穏やかさ。声はAIで生成しています。";
+    partSelect.value = String(index);
+    player.src = part.audio.onyx.file;
+    player.playbackRate = Number(speedSelect.value);
+    byId("audio-previous").disabled = index === 0;
+    byId("audio-next").disabled = index === audioParts.length - 1;
+    if (autoplay) player.play().catch(() => { byId("audio-status").textContent = "再生ボタンを押すと続きから聴けます。"; });
+  }
+  function renderAudio(lecture) {
+    player.pause();
+    player.removeAttribute("src");
+    player.load();
+    const chapter = library.chapters.find(c => c.source === lecture.source_url);
+    audioParts = chapter?.parts?.filter(p => p.audio?.onyx?.file && DukeAudioSource.isAllowedFile(p.audio.onyx.file)) || [];
+    const complete = audioParts.length > 0 && audioParts.length === chapter.parts.length;
+    byId("narration-controls").hidden = !complete;
+    byId("audio-status").textContent = complete ? "Onyx B · 深みのある穏やかさ。声はAIで生成しています。" : ["RSI", "0405", "20260406"].includes(lecture.code) ? "音声化は見送りました。文字版は読めます。" : "この講座の音声はありません。文字版は読めます。";
+    partSelect.replaceChildren();
+    if (!complete) return;
+    audioParts.forEach((part, index) => {
+      const option = element("option", "", `区切り ${index + 1} / ${audioParts.length}`);
+      option.value = String(index); partSelect.append(option);
+    });
+    setAudioPart(0);
+  }
+  for (const mode of ["reading", "source"]) byId("edition-" + mode).addEventListener("click", () => {
+    view = mode;
+    selectFromHash();
+  });
+  partSelect.addEventListener("change", () => setAudioPart(Number(partSelect.value), !player.paused));
+  speedSelect.addEventListener("change", () => { player.playbackRate = Number(speedSelect.value); });
+  byId("audio-previous").addEventListener("click", () => { if (audioIndex > 0) setAudioPart(audioIndex - 1, !player.paused); });
+  byId("audio-next").addEventListener("click", () => { if (audioIndex + 1 < audioParts.length) setAudioPart(audioIndex + 1, !player.paused); });
+  player.addEventListener("ended", () => { if (audioIndex + 1 < audioParts.length) setAudioPart(audioIndex + 1, true); });
+  player.addEventListener("playing", () => { byId("audio-status").textContent = "Onyx B · 深みのある穏やかさ。声はAIで生成しています。"; });
+  player.addEventListener("error", () => { if (player.getAttribute("src")) byId("audio-status").textContent = "音声を読み込めませんでした。通信状態を確認して再度お試しください。"; });
+  window.addEventListener("pagehide", () => player.pause());
 
   ui.skip.addEventListener("click", (event) => {
     event.preventDefault();

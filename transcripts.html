@@ -7,10 +7,11 @@
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="googlebot" content="noindex, nofollow, noarchive">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self' https://github.com https://release-assets.githubusercontent.com; img-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>補足講座の書き起こし | DUKE 聴く読書室</title>
-  <meta name="description" content="補足講座の保存字幕を、元動画の時刻とともに読むページです。">
+  <meta name="description" content="補足41講座の読み上げ用に整えた文章と、元の書き起こしを読むページです。">
   <link rel="stylesheet" href="transcripts.css">
+  <script src="audio-source.js" defer></script>
   <script src="transcripts.js" defer></script>
 </head>
 <body>
@@ -22,8 +23,8 @@
     </header>
 
     <section class="introduction" aria-labelledby="page-title">
-      <h1 id="page-title">補足講座の書き起こし</h1>
-      <p>補足41講座のうち40講座の書き起こしを読めます。保存字幕を掲載しています。誤字や聞き取り違い、字幕が抜けた区間があり、原音との全編照合は未完了です。内容は講座当時のものです。</p>
+      <h1 id="page-title">補足講座を読む・聴く</h1>
+      <p>41講座の書き起こしを、読み上げで聞きやすい文章に整えました。言いよどみや重複、明らかな誤字を直し、説明の順序や一人称を残しています。原音との全編照合はしていないため、不確かな語句や数字は注記付きです。内容は講座当時のものです。</p>
     </section>
 
     <div class="reading-layout">
@@ -55,6 +56,24 @@
           <button id="retry" type="button">もう一度読み込む</button>
         </div>
         <nav id="paging-top" class="lecture-paging" aria-label="前後の講座" hidden></nav>
+        <section class="reading-tools" aria-label="本文と音声">
+          <div class="edition-switch" role="group" aria-label="表示する文章">
+            <button id="edition-reading" type="button" aria-pressed="true">読み上げ用の文章</button>
+            <button id="edition-source" type="button" aria-pressed="false">元の書き起こし</button>
+          </div>
+          <p id="audio-status" class="lecture-status" role="status"></p>
+          <div id="narration-controls" hidden>
+            <label for="narration-part">聴く区切り</label>
+            <select id="narration-part"></select>
+            <audio id="narration" controls preload="none"></audio>
+            <div class="audio-actions">
+              <button id="audio-previous" type="button">前に戻る</button>
+              <button id="audio-next" type="button">次に進む</button>
+              <label for="narration-speed">速さ</label>
+              <select id="narration-speed"><option value="1">1倍</option><option value="1.25">1.25倍</option><option value="1.5">1.5倍</option><option value="1.75">1.75倍</option><option value="2">2倍</option></select>
+            </div>
+          </div>
+        </section>
         <div id="transcript" class="transcript"></div>
         <nav id="paging-bottom" class="lecture-paging bottom-paging" aria-label="読み終えた後の講座選択" hidden></nav>
       </article>

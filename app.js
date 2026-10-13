@@ -38,6 +38,9 @@ function renderChapter() {
   const complete=library.chapters.filter(c=>c.parts.every(p=>p.audio[voice])).length;
   $('voiceDescription').textContent=library.voices.find(v=>v.id===voice).description+' · '+complete+'章を収録';
   document.querySelectorAll('input[name="voice"]').forEach(input=>{input.checked=input.value===voice;input.disabled=!parts()[index].audio[input.value];});
+  const unverified=chapter().edition==='ai_edited_unverified';
+  $('narrationNotice').hidden=!unverified;
+  $('narrationNotice').textContent=unverified?"AIで整えた文章の朗読です。原音との照合はしていないため、聞き取りが不確かな箇所を含みます。":'';
   renderParts();
 }
 function renderSources() {
@@ -116,7 +119,7 @@ $('supplementJump').onclick=()=>{if(!library||library.chapters.length<38)return;
 ['nextPart','nextPartTop'].forEach(id=>{$(id).onclick=()=>movePart(1);});
 window.addEventListener('pagehide',save);document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
 (async()=>{try{
-  const response=await fetch('library.json',{cache:'no-cache'});if(!response.ok)throw Error('Library unavailable');library=await response.json();if(!(library.chapters.length===26||(library.chapters.length>=38&&library.chapters.length<=79))||library.chapters.some((c,i)=>!Number.isInteger(c.id)||!c.parts.length||(i<38?c.id!==i+1:c.id<=library.chapters[i-1].id||c.id<39||c.id>79||c.parts.some(p=>!p.audio?.onyx))))throw Error('Incomplete library');
+  const response=await fetch('library.json',{cache:'no-cache'});if(!response.ok)throw Error('Library unavailable');library=DukeAudioSource.validateLibrary(await response.json());if(!(library.chapters.length===26||(library.chapters.length>=38&&library.chapters.length<=79))||library.chapters.some((c,i)=>!Number.isInteger(c.id)||!c.parts.length||(i<38?c.id!==i+1:c.id<=library.chapters[i-1].id||c.id<39||c.id>79||c.parts.some(p=>!p.audio?.onyx))))throw Error('Incomplete library');
   $('chapter').replaceChildren();
   for(const [label, filter] of [['本編 第1〜26章',c=>c.id<=26],['補足講座 第27〜38章',c=>c.id>=27&&c.id<=38],['補足・講座別',c=>c.id>=39]]){
     const group=document.createElement('optgroup');group.label=label;

@@ -7,3 +7,5 @@
 
 .partNavigation{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 24px}.partNavigation button{min-width:0;min-height:48px;padding:10px 8px;border:1px solid #8293a9;border-radius:9px;background:#1d3149;color:#fff;font-size:.875rem;line-height:1.5}.partNavigation button:enabled:hover{background:#2b425f}.controls{gap:clamp(10px,4vw,26px)}.controls small{white-space:nowrap}
 .transcriptNav{margin:-12px 0 28px;padding:18px 20px;background:#fff;border:1px solid #dce3ec;border-radius:12px;gap:6px}.transcriptNav a{color:#17283d;font-weight:700;line-height:1.7;text-underline-offset:4px}.transcriptNav span{color:#586b80;font-size:.875rem}
+
+.audioRecovery{display:flex;flex-direction:column;align-items:stretch;gap:4px;margin:-8px 0 20px;font-size:.875rem;line-height:1.6}.audioRecovery button{min-height:44px;padding:9px 12px;border:1px solid #8293a9;border-radius:8px;background:#1d3149;color:#fff}.audioRecovery a{display:flex;align-items:center;justify-content:center;min-height:44px;color:#e7b75b;text-underline-offset:3px;overflow-wrap:anywhere}.audioRecovery a[hidden]{display:none}#status{overflow-wrap:anywhere}

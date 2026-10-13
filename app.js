@@ -3,7 +3,8 @@ const $ = id => document.getElementById(id), audio = $('audio');
 const key = 'duke-reader-v2', speeds = [.8,1,1.25,1.5,1.75,2,2.5,3];
 let library, chapterIndex = 0, index = 0, voice = 'onyx', pending = 0;
 let loadId = 0, lastSave = 0, switching = false, restored = false;
-let lastKnownTime = 0, needsReload = false;
+let lastKnownTime = 0, needsReload = false, seekPending = false, lastPlayErrorName = '';
+const playErrorNames = new Set(['NotAllowedError','NotSupportedError','NetworkError','AbortError','SecurityError','InvalidStateError','NotReadableError','TypeError']);
 const time = s => { s=Math.max(0,Math.floor(Number(s)||0)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); };
 const chapter = () => library.chapters[chapterIndex];
 const parts = () => chapter().parts;
@@ -15,12 +16,16 @@ function save() {
 }
 function status(message) { $('status').textContent=message; }
 function playbackError(error) {
-  if(error?.name==='NotAllowedError')return '端末が再生を止めています。再生ボタンを押して聴き始めてください。';
-  if(audio.error?.code===2||error?.name==='NetworkError')return '通信が途切れました。再生ボタンで音声を読み込み直せます。';
-  if(audio.error?.code===3)return '音声を読み取れませんでした。再生ボタンで読み込み直してください。';
-  if(audio.error?.code===4||error?.name==='NotSupportedError')return '音声を読み込めませんでした。再生ボタンで読み込み直せます。';
-  if(audio.error?.code===1)return '音声の読み込みが中断されました。再生ボタンで続けてください。';
-  return '再生できませんでした。再生ボタンをもう一度押してください。';
+  if(error)lastPlayErrorName=playErrorNames.has(error.name)?error.name:'UnknownError';
+  const code=[1,2,3,4].includes(audio.error?.code)?audio.error.code:audio.error?'不明':'なし';
+  const detail=`（音声: ${code} / 再生: ${lastPlayErrorName||'未取得'}）`;
+  let message='再生できませんでした。「音声を読み込み直す」を押してください。';
+  if(lastPlayErrorName==='NotAllowedError')message='端末が再生を止めています。再生ボタンを押してください。';
+  else if(code===2||lastPlayErrorName==='NetworkError')message='通信が途切れました。「音声を読み込み直す」で再開できます。';
+  else if(code===3)message='音声を読み取れませんでした。「音声を読み込み直す」を押してください。';
+  else if(code===4||lastPlayErrorName==='NotSupportedError')message='音声を読み込めませんでした。読み込み直すか、別画面で開いてください。';
+  else if(code===1)message='音声の読み込みが中断されました。再生ボタンで続けてください。';
+  return message+' '+detail;
 }
 function playState(playing) { $('play').textContent=playing?'Ⅱ':'▶'; $('play').setAttribute('aria-label',playing?'一時停止':'再生'); }
 function sync() {
@@ -75,11 +80,14 @@ function renderPosition() {
   const file=chapter().downloads[voice]||recording()?.file;
   $('download').hidden=!file;
   if(file){$('download').href=file;$('download').textContent=chapter().downloads[voice]?'この章の音声を保存 ↓':'この区切りの音声を保存 ↓';}else $('download').removeAttribute('href');
+  const direct=recording()?.file, allowed=DukeAudioSource.isAllowedFile(direct);
+  $('audioReload').disabled=!allowed;$('audioOpen').hidden=!allowed;
+  if(allowed)$('audioOpen').href=direct;else $('audioOpen').removeAttribute('href');
   if('mediaSession'in navigator&&typeof MediaMetadata!=='undefined')navigator.mediaSession.metadata=new MediaMetadata({title:`第${chapter().id}章 ${chapter().title} · ${parts()[index].title}`,artist:'Personal Library · '+voice+'（AI朗読）'});
 }
 function loadPart(seconds=0) {
   switching=true; loadId++; audio.pause(); pending=Number.isFinite(seconds)?Math.max(0,seconds):0;
-  lastKnownTime=pending;needsReload=false;
+  lastKnownTime=pending;needsReload=false;seekPending=true;lastPlayErrorName='';
   audio.removeAttribute('src'); audio.load(); playState(false);
   const item=recording(); ['play','back','forward','seek'].forEach(id=>{$(id).disabled=!item;});
   if(item){audio.src=item.file;audio.playbackRate=Number($('speed').value);audio.preservesPitch=true;status('音声を読み込んでいます…');}
@@ -87,7 +95,7 @@ function loadPart(seconds=0) {
   renderPosition(); switching=false; sync(); save();
 }
 async function play(retry=false) {
-  if(!library||!recording())return;
+  if(!library||!DukeAudioSource.isAllowedFile(recording()?.file))return;
   // Reload only on an explicit retry; call play() before leaving the user gesture.
   if(retry===true&&(audio.error||needsReload))loadPart(position());
   const expected=loadId;
@@ -96,6 +104,11 @@ async function play(retry=false) {
     if(audio.error||error?.name==='NotSupportedError'||error?.name==='NetworkError')needsReload=true;
     playState(false);status(playbackError(error));
   }
+}
+function reloadAudio() {
+  if(!library||!DukeAudioSource.isAllowedFile(recording()?.file))return;
+  // Do not wait for metadata: iOS needs play() in this same explicit tap.
+  loadPart(position());void play();
 }
 function selectPart(i,autoplay=false){if(!Number.isInteger(i)||i<0||i>=parts().length)return;index=i;restored=false;loadPart();if(autoplay)void play();}
 function movePart(direction,autoplay=!audio.paused) {
@@ -113,17 +126,26 @@ function changeVoice(next) {
   const wasPlaying=!audio.paused,d=Number.isFinite(audio.duration)?audio.duration:recording()?.duration||0,ratio=d?Math.min(1,position()/d):0;
   voice=next;const nextTime=ratio*(recording()?.duration||0);renderChapter();loadPart(nextTime);if(wasPlaying)void play();
 }
-function skip(s){if(!recording()||!Number.isFinite(audio.duration))return;pending=0;audio.currentTime=Math.max(0,Math.min(audio.duration,audio.currentTime+s));sync();save();}
-audio.addEventListener('loadedmetadata',()=>{
+function skip(s){if(!recording()||!Number.isFinite(audio.duration))return;audio.currentTime=Math.max(0,Math.min(audio.duration,audio.currentTime+s));pending=0;seekPending=false;sync();save();}
+function restorePosition() {
   if(!library||!recording())return;
-  if(Number.isFinite(audio.duration))audio.currentTime=Math.min(pending,Math.max(0,audio.duration-.05));pending=0;
-  audio.playbackRate=Number($('speed').value);sync();if(audio.paused)status(restored?'前回の続きから聴けます':'再生ボタンで聴き始める');
+  if(seekPending&&Number.isFinite(audio.duration)&&!audio.error){
+    try{audio.currentTime=Math.min(pending,Math.max(0,audio.duration-.05));}
+    catch{return;} // Some mobile engines cannot seek until canplay.
+    pending=0;seekPending=false;
+  }
+  audio.playbackRate=Number($('speed').value);sync();
+}
+audio.addEventListener('loadedmetadata',()=>{
+  restorePosition();
+  if(library&&audio.paused&&!audio.error&&!needsReload)status(restored?'前回の続きから聴けます':'再生ボタンで聴き始める');
 });
+audio.addEventListener('canplay',restorePosition);
 audio.addEventListener('play',()=>{playState(true);status('音声を読み込んでいます…');});
-audio.addEventListener('playing',()=>{if(!library||audio.paused||audio.error)return;needsReload=false;playState(true);status('再生中');});
+audio.addEventListener('playing',()=>{if(!library||audio.paused||audio.error)return;needsReload=false;lastPlayErrorName='';playState(true);status('再生中');});
 audio.addEventListener('waiting',()=>{if(library&&!audio.paused&&!audio.error)status('音声の続きを読み込んでいます…');});
-audio.addEventListener('stalled',()=>{if(library&&!audio.paused&&!audio.error)status('音声の読み込みを待っています。通信状態を確認してください。');});
-audio.addEventListener('pause',()=>{if(switching||!library)return;playState(false);if(recording()&&!audio.ended)status('一時停止');save();});
+audio.addEventListener('stalled',()=>{if(library&&!audio.paused&&!audio.error)status('音声の読み込みを待っています。止まったままなら「音声を読み込み直す」を押してください。');});
+audio.addEventListener('pause',()=>{if(switching||!library)return;playState(false);if(recording()&&!audio.ended&&!audio.error&&!needsReload)status('一時停止');save();});
 audio.addEventListener('timeupdate',sync);
 audio.addEventListener('error',()=>{if(!switching&&library&&recording()){
   if(Number.isFinite(audio.currentTime)&&audio.currentTime>0)lastKnownTime=audio.currentTime;
@@ -135,8 +157,14 @@ audio.addEventListener('ended',()=>{
   else{playState(false);status(`第${chapter().id}章を聴き終えました`);save();}
 });
 $('play').onclick=()=>audio.paused||audio.error||needsReload?void play(true):audio.pause();$('back').onclick=()=>skip(-15);$('forward').onclick=()=>skip(15);
+$('audioReload').onclick=reloadAudio;
+$('audioOpen').onclick=event=>{
+  const file=library&&recording()?.file;
+  if(!DukeAudioSource.isAllowedFile(file)){event.preventDefault();return;}
+  $('audioOpen').href=file;audio.pause();save();
+};
 $('speed').onchange=()=>{audio.playbackRate=Number($('speed').value);save();};
-$('seek').oninput=()=>{if(library&&recording()&&Number.isFinite(audio.duration)){pending=0;audio.currentTime=Number($('seek').value)*audio.duration/100;sync();save();}};
+$('seek').oninput=()=>{if(library&&recording()&&Number.isFinite(audio.duration)){audio.currentTime=Number($('seek').value)*audio.duration/100;pending=0;seekPending=false;sync();save();}};
 $('chapter').onchange=()=>{const next=Number($('chapter').value);if(!Number.isInteger(next)||!library.chapters[next])return;const playing=!audio.paused;chapterIndex=next;index=0;restored=false;renderChapter();loadPart();if(playing)void play();};
 $('supplementJump').onclick=()=>{if(!library||library.chapters.length<38)return;$('chapter').value='26';$('chapter').onchange();};
 ['previousPart','previousPartTop'].forEach(id=>{$(id).onclick=()=>movePart(-1);});

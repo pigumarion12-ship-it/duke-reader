@@ -214,7 +214,7 @@
         : lecture.code === "20210414"
           ? "音声からの自動書き起こしです。時刻は約5分の音声区間で、文ごとの時刻ではありません。"
           : "保存字幕をそのまま表示しています。時刻は元動画の位置です。";
-    document.title = `${lecture.title} | DUKE 講座の書き起こし`;
+    document.title = `${lecture.title} | Personal Library`;
     renderCatalog();
     renderPaging(index);
     renderTranscript(lecture);

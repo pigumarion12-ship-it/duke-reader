@@ -7,7 +7,7 @@
 })(typeof window !== 'undefined' ? window : globalThis, function () {
   'use strict';
   const local = /^audio\/onyx-b\/ch[0-9]{2}-p[0-9]{3}\.96k\.mp3$/;
-  const released = /^https:\/\/github\.com\/pigumarion12-ship-it\/duke-reader\/releases\/download\/duke-supplement-audio-20261013\/ch[0-9]{2}-p[0-9]{3}\.96k\.mp3$/;
+  const released = /^https:\/\/github\.com\/pigumarion12-ship-it\/library-7f3c\/releases\/download\/audio-20261013\/ch[0-9]{2}-p[0-9]{3}\.96k\.mp3$/;
   function isAllowedFile(value) {
     return typeof value === 'string' && value.length <= 256 &&
       !/\s/.test(value) && (local.test(value) || released.test(value));

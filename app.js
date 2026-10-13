@@ -65,7 +65,7 @@ function renderPosition() {
   const file=chapter().downloads[voice]||recording()?.file;
   $('download').hidden=!file;
   if(file){$('download').href=file;$('download').textContent=chapter().downloads[voice]?'この章の音声を保存 ↓':'この区切りの音声を保存 ↓';}else $('download').removeAttribute('href');
-  if('mediaSession'in navigator&&typeof MediaMetadata!=='undefined')navigator.mediaSession.metadata=new MediaMetadata({title:`第${chapter().id}章 ${chapter().title} · ${parts()[index].title}`,artist:'DUKE 聴く読書室 · '+voice+'（AI朗読）'});
+  if('mediaSession'in navigator&&typeof MediaMetadata!=='undefined')navigator.mediaSession.metadata=new MediaMetadata({title:`第${chapter().id}章 ${chapter().title} · ${parts()[index].title}`,artist:'Personal Library · '+voice+'（AI朗読）'});
 }
 function loadPart(seconds=0) {
   switching=true; loadId++; audio.pause(); pending=Number.isFinite(seconds)?Math.max(0,seconds):0;

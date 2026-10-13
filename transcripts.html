@@ -10,9 +10,9 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self' https://github.com https://release-assets.githubusercontent.com; img-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>補足講座の書き起こし | Personal Library</title>
   <meta name="description" content="補足41講座の読み上げ用に整えた文章と、元の書き起こしを読むページです。">
-  <link rel="stylesheet" href="transcripts.css">
+  <link rel="stylesheet" href="transcripts.css?v=20261013-retry1">
   <script src="audio-source.js" defer></script>
-  <script src="transcripts.js" defer></script>
+  <script src="transcripts.js?v=20261013-retry1" defer></script>
 </head>
 <body>
   <a id="skip-to-reading" class="skip-link" href="#reading">本文へ移動</a>
@@ -61,11 +61,14 @@
             <button id="edition-reading" type="button" aria-pressed="true">読み上げ用の文章</button>
             <button id="edition-source" type="button" aria-pressed="false">元の書き起こし</button>
           </div>
-          <p id="audio-status" class="lecture-status" role="status"></p>
+          <p id="audio-status" class="lecture-status" role="status" aria-live="polite"></p>
           <div id="narration-controls" hidden>
             <label for="narration-part">聴く区切り</label>
             <select id="narration-part"></select>
-            <audio id="narration" controls preload="none"></audio>
+            <button id="audio-play" class="audio-play" type="button" disabled>▶ 再生する</button>
+            <audio id="narration" controls preload="none" playsinline></audio>
+            <button id="audio-reload" class="audio-reload" type="button" disabled>音声を読み込み直す</button>
+            <a id="audio-open" class="audio-open" target="_blank" rel="noopener noreferrer" hidden>この音声を別画面で開く</a>
             <div class="audio-actions">
               <button id="audio-previous" type="button">前に戻る</button>
               <button id="audio-next" type="button">次に進む</button>

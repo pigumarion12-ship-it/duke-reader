@@ -32,6 +32,11 @@
   const player = byId("narration");
   const partSelect = byId("narration-part");
   const speedSelect = byId("narration-speed");
+  const playButton = byId("audio-play");
+  const reloadAudio = byId("audio-reload");
+  const openAudio = byId("audio-open");
+  let audioLoadId = 0, audioPendingTime = 0, audioLastTime = 0;
+  let audioNeedsReload = false, audioSwitching = false;
 
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -285,26 +290,76 @@
     }
   }
 
-  function setAudioPart(index, autoplay = false) {
-    player.pause();
+  function activeAudio() {
+    const recording = audioParts[audioIndex]?.audio?.onyx;
+    return recording && DukeAudioSource.isAllowedFile(recording.file) ? recording : null;
+  }
+  function audioPosition() {
+    return audioPendingTime || (player.error || audioNeedsReload ? audioLastTime : Number.isFinite(player.currentTime) ? player.currentTime : 0);
+  }
+  function audioMessage(message) { byId("audio-status").textContent = message; }
+  function renderAudioButton() {
+    playButton.disabled = !activeAudio();
+    reloadAudio.disabled = !activeAudio();
+    playButton.textContent = player.error || audioNeedsReload ? "読み込み直して再生" : player.paused ? "▶ 再生する" : "Ⅱ 一時停止";
+  }
+  function audioFallback(show = false) {
+    const file = activeAudio()?.file;
+    openAudio.hidden = !show || !file;
+    if (show && file) openAudio.href = file;
+    else openAudio.removeAttribute("href");
+  }
+  function audioErrorMessage(error) {
+    if (error?.name === "NotAllowedError") return "端末が再生を止めています。「再生する」を押して聴き始めてください。";
+    if (player.error?.code === 2 || error?.name === "NetworkError") return "通信が途切れました。「読み込み直して再生」で続けられます。";
+    if (player.error?.code === 3) return "音声を読み取れませんでした。読み込み直すか、別画面で開いてください。";
+    if (player.error?.code === 4 || error?.name === "NotSupportedError") return "音声を読み込めませんでした。読み込み直すか、別画面で開いてください。";
+    if (player.error?.code === 1) return "音声の読み込みが中断されました。「読み込み直して再生」で続けられます。";
+    return "再生できませんでした。もう一度「再生する」を押すか、別画面で開いてください。";
+  }
+  function restoreAudioPosition() {
+    if (!audioPendingTime || !Number.isFinite(player.duration)) return;
+    const target = Math.min(audioPendingTime, Math.max(0, player.duration - .05));
+    try { player.currentTime = target; audioPendingTime = 0; audioLastTime = target; }
+    catch { /* Some mobile players cannot seek until canplay. Keep the requested position. */ }
+  }
+  function setAudioPart(index, autoplay = false, seconds = 0) {
+    const recording = audioParts[index]?.audio?.onyx;
+    if (!Number.isInteger(index) || !recording || !DukeAudioSource.isAllowedFile(recording.file)) return;
+    audioSwitching = true; audioLoadId++; player.pause();
     audioIndex = index;
-    const part = audioParts[index];
-    if (!part) return;
-    byId("audio-status").textContent = "Onyx B · 深みのある穏やかさ。声はAIで生成しています。";
+    audioPendingTime = Number.isFinite(seconds) ? Math.max(0, seconds) : 0;
+    audioLastTime = audioPendingTime; audioNeedsReload = false;
     partSelect.value = String(index);
-    player.src = part.audio.onyx.file;
-    player.playbackRate = Number(speedSelect.value);
+    player.src = recording.file; player.load();
+    player.playbackRate = Number(speedSelect.value); player.preservesPitch = true;
     byId("audio-previous").disabled = index === 0;
     byId("audio-next").disabled = index === audioParts.length - 1;
-    if (autoplay) player.play().catch(() => { byId("audio-status").textContent = "再生ボタンを押すと続きから聴けます。"; });
+    audioSwitching = false; renderAudioButton(); audioFallback();
+    audioMessage("Onyx B（AI音声）・「再生する」で聴き始める");
+    if (autoplay) void playAudio();
+  }
+  async function playAudio(retry = false) {
+    if (!activeAudio()) return;
+    // Keep reload and play in the same user gesture; do not await metadata first.
+    if (retry === true && (player.error || audioNeedsReload)) setAudioPart(audioIndex, false, audioPosition());
+    const expected = audioLoadId;
+    try { await player.play(); }
+    catch (error) {
+      if (expected !== audioLoadId || error?.name === "AbortError") return;
+      if (player.error || error?.name === "NotSupportedError" || error?.name === "NetworkError") audioNeedsReload = true;
+      renderAudioButton(); audioFallback(true); audioMessage(audioErrorMessage(error));
+    }
   }
   function renderAudio(lecture) {
-    player.pause();
+    audioSwitching = true; audioLoadId++; player.pause();
     player.removeAttribute("src");
     player.load();
+    audioIndex = 0; audioPendingTime = 0; audioLastTime = 0; audioNeedsReload = false;
     const chapter = library.chapters.find(c => c.source === lecture.source_url);
     audioParts = chapter?.parts?.filter(p => p.audio?.onyx?.file && DukeAudioSource.isAllowedFile(p.audio.onyx.file)) || [];
     const complete = audioParts.length > 0 && audioParts.length === chapter.parts.length;
+    audioSwitching = false; renderAudioButton(); audioFallback();
     byId("narration-controls").hidden = !complete;
     byId("audio-status").textContent = complete ? "Onyx B · 深みのある穏やかさ。声はAIで生成しています。" : ["RSI", "0405", "20260406"].includes(lecture.code) ? "音声化は見送りました。文字版は読めます。" : "この講座の音声はありません。文字版は読めます。";
     partSelect.replaceChildren();
@@ -320,12 +375,38 @@
     selectFromHash();
   });
   partSelect.addEventListener("change", () => setAudioPart(Number(partSelect.value), !player.paused));
+  playButton.addEventListener("click", () => {
+    if (player.paused || player.error || audioNeedsReload) void playAudio(true);
+    else player.pause();
+  });
+  reloadAudio.addEventListener("click", () => {
+    if (!activeAudio()) return;
+    setAudioPart(audioIndex, false, audioPosition());
+    void playAudio();
+  });
   speedSelect.addEventListener("change", () => { player.playbackRate = Number(speedSelect.value); });
   byId("audio-previous").addEventListener("click", () => { if (audioIndex > 0) setAudioPart(audioIndex - 1, !player.paused); });
   byId("audio-next").addEventListener("click", () => { if (audioIndex + 1 < audioParts.length) setAudioPart(audioIndex + 1, !player.paused); });
-  player.addEventListener("ended", () => { if (audioIndex + 1 < audioParts.length) setAudioPart(audioIndex + 1, true); });
-  player.addEventListener("playing", () => { byId("audio-status").textContent = "Onyx B · 深みのある穏やかさ。声はAIで生成しています。"; });
-  player.addEventListener("error", () => { if (player.getAttribute("src")) byId("audio-status").textContent = "音声を読み込めませんでした。通信状態を確認して再度お試しください。"; });
+  player.addEventListener("ended", () => {
+    if (audioIndex + 1 < audioParts.length) setAudioPart(audioIndex + 1, true);
+    else { renderAudioButton(); audioMessage("この講座の音声を聴き終えました。"); }
+  });
+  player.addEventListener("loadedmetadata", () => { restoreAudioPosition(); player.playbackRate = Number(speedSelect.value); });
+  player.addEventListener("canplay", restoreAudioPosition);
+  player.addEventListener("timeupdate", () => { if (!player.error && !audioNeedsReload && !audioPendingTime && Number.isFinite(player.currentTime)) audioLastTime = player.currentTime; });
+  player.addEventListener("play", () => { renderAudioButton(); audioMessage("音声を読み込んでいます…"); });
+  player.addEventListener("playing", () => {
+    if (!activeAudio() || player.paused || player.error) return;
+    audioNeedsReload = false; restoreAudioPosition(); renderAudioButton(); audioFallback(); audioMessage("再生中 · Onyx B（AI音声）");
+  });
+  player.addEventListener("waiting", () => { if (activeAudio() && !player.paused && !player.error) audioMessage("音声の続きを読み込んでいます…"); });
+  player.addEventListener("stalled", () => { if (activeAudio() && !player.paused && !player.error) audioMessage("音声の読み込みを待っています。通信状態を確認してください。"); });
+  player.addEventListener("pause", () => { if (!audioSwitching && activeAudio()) { renderAudioButton(); if (!player.error && !audioNeedsReload && !player.ended) audioMessage("一時停止"); } });
+  player.addEventListener("error", () => {
+    if (audioSwitching || !activeAudio()) return;
+    if (Number.isFinite(player.currentTime) && player.currentTime > 0) audioLastTime = player.currentTime;
+    audioNeedsReload = true; renderAudioButton(); audioFallback(true); audioMessage(audioErrorMessage());
+  });
   window.addEventListener("pagehide", () => player.pause());
 
   ui.skip.addEventListener("click", (event) => {

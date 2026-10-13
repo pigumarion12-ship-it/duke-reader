@@ -107,6 +107,9 @@ button:disabled, input:disabled { opacity: .6; cursor: wait; }
 .edition-switch button[aria-pressed="true"] { background: #19394c; color: #fff; border-color: #19394c; }
 .reading-tools select { max-width: 100%; font: inherit; padding: .5rem; }
 .reading-tools audio { display: block; width: 100%; margin: .8rem 0; }
+.reading-tools .audio-play { display: block; width: 100%; min-height: 52px; margin-top: 1rem; background: var(--navy); border-color: var(--navy); color: #fff; font-size: 16px; font-weight: 650; }
+.audio-open { display: inline-block; min-height: 44px; padding: 10px 0; font-size: 14px; }
+.reading-tools .audio-reload { min-height: 44px; margin: 0 12px 8px 0; font-size: 14px; }
 .reading-paragraph { border-bottom: 1px solid #dce2e7; padding: 1rem 0; }
 .reading-paragraph p { white-space: pre-wrap; line-height: 1.95; overflow-wrap: anywhere; }
 .reading-paragraph.uncertain { border-left: 3px solid #ba9a60; padding-left: 1rem; }

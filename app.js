@@ -3,20 +3,30 @@ const $ = id => document.getElementById(id), audio = $('audio');
 const key = 'duke-reader-v2', speeds = [.8,1,1.25,1.5,1.75,2,2.5,3];
 let library, chapterIndex = 0, index = 0, voice = 'onyx', pending = 0;
 let loadId = 0, lastSave = 0, switching = false, restored = false;
+let lastKnownTime = 0, needsReload = false;
 const time = s => { s=Math.max(0,Math.floor(Number(s)||0)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); };
 const chapter = () => library.chapters[chapterIndex];
 const parts = () => chapter().parts;
 const recording = () => parts()[index].audio[voice];
-const position = () => pending || (Number.isFinite(audio.currentTime) ? audio.currentTime : 0);
+const position = () => pending || (audio.error||needsReload ? lastKnownTime : Number.isFinite(audio.currentTime) ? audio.currentTime : 0);
 function save() {
   if (!library || switching) return;
   try { localStorage.setItem(key,JSON.stringify({chapter:chapterIndex,chapterId:chapter().id,index,voice,edition:'onyx-b-medium-v1',time:position(),speed:Number($('speed').value)})); } catch {}
 }
 function status(message) { $('status').textContent=message; }
+function playbackError(error) {
+  if(error?.name==='NotAllowedError')return '端末が再生を止めています。再生ボタンを押して聴き始めてください。';
+  if(audio.error?.code===2||error?.name==='NetworkError')return '通信が途切れました。再生ボタンで音声を読み込み直せます。';
+  if(audio.error?.code===3)return '音声を読み取れませんでした。再生ボタンで読み込み直してください。';
+  if(audio.error?.code===4||error?.name==='NotSupportedError')return '音声を読み込めませんでした。再生ボタンで読み込み直せます。';
+  if(audio.error?.code===1)return '音声の読み込みが中断されました。再生ボタンで続けてください。';
+  return '再生できませんでした。再生ボタンをもう一度押してください。';
+}
 function playState(playing) { $('play').textContent=playing?'Ⅱ':'▶'; $('play').setAttribute('aria-label',playing?'一時停止':'再生'); }
 function sync() {
   if (!library) return;
   const d=Number.isFinite(audio.duration)?audio.duration:recording()?.duration||0, s=position();
+  if(!audio.error)lastKnownTime=s;
   $('elapsed').textContent=time(s); $('duration').textContent=time(d); $('seek').value=d?Math.min(100,s/d*100):0;
   $('seek').setAttribute('aria-valuetext',time(s)+' / '+time(d));
   if(Date.now()-lastSave>2000){save();lastSave=Date.now();}
@@ -69,15 +79,23 @@ function renderPosition() {
 }
 function loadPart(seconds=0) {
   switching=true; loadId++; audio.pause(); pending=Number.isFinite(seconds)?Math.max(0,seconds):0;
+  lastKnownTime=pending;needsReload=false;
   audio.removeAttribute('src'); audio.load(); playState(false);
   const item=recording(); ['play','back','forward','seek'].forEach(id=>{$(id).disabled=!item;});
   if(item){audio.src=item.file;audio.playbackRate=Number($('speed').value);audio.preservesPitch=true;status('音声を読み込んでいます…');}
   else{pending=0;status('この区切りの音声は準備中です。本文は読めます。');}
   renderPosition(); switching=false; sync(); save();
 }
-async function play() {
-  if(!recording())return; const expected=loadId;
-  try{await audio.play();}catch(error){if(expected===loadId&&error.name!=='AbortError')status('再生できませんでした。再生ボタンをもう一度押してください。');}
+async function play(retry=false) {
+  if(!library||!recording())return;
+  // Reload only on an explicit retry; call play() before leaving the user gesture.
+  if(retry===true&&(audio.error||needsReload))loadPart(position());
+  const expected=loadId;
+  try{await audio.play();}catch(error){
+    if(expected!==loadId||error?.name==='AbortError')return;
+    if(audio.error||error?.name==='NotSupportedError'||error?.name==='NetworkError')needsReload=true;
+    playState(false);status(playbackError(error));
+  }
 }
 function selectPart(i,autoplay=false){if(!Number.isInteger(i)||i<0||i>=parts().length)return;index=i;restored=false;loadPart();if(autoplay)void play();}
 function movePart(direction,autoplay=!audio.paused) {
@@ -101,16 +119,22 @@ audio.addEventListener('loadedmetadata',()=>{
   if(Number.isFinite(audio.duration))audio.currentTime=Math.min(pending,Math.max(0,audio.duration-.05));pending=0;
   audio.playbackRate=Number($('speed').value);sync();if(audio.paused)status(restored?'前回の続きから聴けます':'再生ボタンで聴き始める');
 });
-audio.addEventListener('play',()=>{playState(true);status('再生中');});
+audio.addEventListener('play',()=>{playState(true);status('音声を読み込んでいます…');});
+audio.addEventListener('playing',()=>{if(!library||audio.paused||audio.error)return;needsReload=false;playState(true);status('再生中');});
+audio.addEventListener('waiting',()=>{if(library&&!audio.paused&&!audio.error)status('音声の続きを読み込んでいます…');});
+audio.addEventListener('stalled',()=>{if(library&&!audio.paused&&!audio.error)status('音声の読み込みを待っています。通信状態を確認してください。');});
 audio.addEventListener('pause',()=>{if(switching||!library)return;playState(false);if(recording()&&!audio.ended)status('一時停止');save();});
 audio.addEventListener('timeupdate',sync);
-audio.addEventListener('error',()=>{if(!switching&&library&&recording()){playState(false);status('音声を読み込めません。通信状態を確認して再生し直してください。');}});
+audio.addEventListener('error',()=>{if(!switching&&library&&recording()){
+  if(Number.isFinite(audio.currentTime)&&audio.currentTime>0)lastKnownTime=audio.currentTime;
+  needsReload=true;playState(false);status(playbackError());
+}});
 audio.addEventListener('ended',()=>{
   if(index+1<parts().length)selectPart(index+1,true);
   else if(chapterIndex+1<library.chapters.length&&library.chapters[chapterIndex+1].parts[0].audio[voice]){chapterIndex++;index=0;renderChapter();loadPart();void play();}
   else{playState(false);status(`第${chapter().id}章を聴き終えました`);save();}
 });
-$('play').onclick=()=>audio.paused?void play():audio.pause();$('back').onclick=()=>skip(-15);$('forward').onclick=()=>skip(15);
+$('play').onclick=()=>audio.paused||audio.error||needsReload?void play(true):audio.pause();$('back').onclick=()=>skip(-15);$('forward').onclick=()=>skip(15);
 $('speed').onchange=()=>{audio.playbackRate=Number($('speed').value);save();};
 $('seek').oninput=()=>{if(library&&recording()&&Number.isFinite(audio.duration)){pending=0;audio.currentTime=Number($('seek').value)*audio.duration/100;sync();save();}};
 $('chapter').onchange=()=>{const next=Number($('chapter').value);if(!Number.isInteger(next)||!library.chapters[next])return;const playing=!audio.paused;chapterIndex=next;index=0;restored=false;renderChapter();loadPart();if(playing)void play();};
@@ -134,5 +158,5 @@ window.addEventListener('pagehide',save);document.addEventListener('visibilitych
   voice=library.voices[0].id;
   if(state){const byId=Number.isInteger(state.chapterId)?library.chapters.findIndex(c=>c.id===state.chapterId):-1;if(byId>=0)chapterIndex=byId;else if(Number.isInteger(state.chapter)&&library.chapters[state.chapter])chapterIndex=state.chapter;if(Number.isInteger(state.index)&&parts()[state.index])index=state.index;if(library.voices.some(v=>v.id===state.voice))voice=state.voice;if(speeds.includes(state.speed))$('speed').value=String(state.speed);restored=true;}
   renderChapter();loadPart(restored&&state.edition==='onyx-b-medium-v1'&&Number.isFinite(state.time)?state.time:0);
-  if('mediaSession'in navigator)for(const[name,fn]of Object.entries({play,pause:()=>audio.pause(),seekbackward:()=>skip(-15),seekforward:()=>skip(15),previoustrack:()=>movePart(-1),nexttrack:()=>movePart(1)})){try{navigator.mediaSession.setActionHandler(name,fn);}catch{}}
+  if('mediaSession'in navigator)for(const[name,fn]of Object.entries({play:()=>play(true),pause:()=>audio.pause(),seekbackward:()=>skip(-15),seekforward:()=>skip(15),previoustrack:()=>movePart(-1),nexttrack:()=>movePart(1)})){try{navigator.mediaSession.setActionHandler(name,fn);}catch{}}
 }catch{status('本文を読み込めません。ページを開き直してください。');}})();
